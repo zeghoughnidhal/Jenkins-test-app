@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.khoubyari</groupId>
+	<groupId>com.cloudwatt</groupId>
 	<artifactId>spring-boot-rest-example</artifactId>
 	<version>0.5.0</version>
 	<packaging>war</packaging>
@@ -12,11 +12,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.9.RELEASE</version>
+		<version>LATEST</version>
 	</parent>
 
 	<properties>
-		<start-class>com.khoubyari.example.Application</start-class>
+		<start-class>com.cloudwatt.example.Application</start-class>
 	</properties>
 
 	<dependencies>
@@ -32,6 +32,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+
 		<!-- Spring security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -41,7 +46,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- spring-data-jpa, spring-orm and Hibernate -->
@@ -100,12 +104,27 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+<!--		<dependency>-->
+<!--			<groupId>junit</groupId>-->
+<!--			<artifactId>junit</artifactId>-->
+<!--			<version>4.12</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+
 		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>
