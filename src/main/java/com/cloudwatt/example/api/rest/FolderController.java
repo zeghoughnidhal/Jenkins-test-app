@@ -24,6 +24,14 @@ public class FolderController extends AbstractRestHandler {
     @Autowired
     public FolderService folderService;
 
+    public String getJenkinsFolderPath(String... folders) {
+        String path = "";
+        for (String folder : folders) {
+            path += "/job/" + folder;
+        }
+        return path;
+    }
+
 
 //    @RequestMapping(
 //            value = "/{projectName}",
@@ -48,12 +56,44 @@ public class FolderController extends AbstractRestHandler {
     @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
     public
     @ResponseBody
-    // Folder getFolderByName(@PathVariable("projectName") String projectName, @PathVariable("projectName") String projectName ,@PathVariable("projectName") String projectName) {
-    Folder getFolderByName(@PathVariable("projectName") String projectName) {
+        // Folder getFolderByName(@PathVariable("projectName") String projectName, @PathVariable("projectName") String projectName ,@PathVariable("projectName") String projectName) {
+    Folder getFolderLevel1(@PathVariable("projectName") String projectName) {
         // TODO découper l'url des jobs en 3 parties projectName -> project1Name (Functional-tests) / project2Name (Tempest) / project3Name (
-        Folder folder = this.folderService.getFolder(projectName);
+        Folder folder = this.folderService.getFolder(getJenkinsFolderPath(projectName));
         return folder;
     }
 
+    @RequestMapping(value = "/{projectName}/{projectName2}",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+/*    @RequestMapping(value = "/{project1Name}/{project2Name}/{project3Name}",
+            method = RequestMethod.GET,
+            produces = {"application/json"})*/
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public
+    @ResponseBody
+        // Folder getFolderByName(@PathVariable("projectName") String projectName, @PathVariable("projectName") String projectName ,@PathVariable("projectName") String projectName) {
+    Folder getFolderLevel2(@PathVariable("projectName") String projectName, @PathVariable("projectName2") String projectName2) {
+        // TODO découper l'url des jobs en 3 parties projectName -> project1Name (Functional-tests) / project2Name (Tempest) / project3Name (
+        Folder folder = this.folderService.getFolder(getJenkinsFolderPath(projectName, projectName2));
+        return folder;
+    }
 
+    @RequestMapping(value = "/{projectName}/{projectName2}/{projectName3}",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+/*    @RequestMapping(value = "/{project1Name}/{project2Name}/{project3Name}",
+            method = RequestMethod.GET,
+            produces = {"application/json"})*/
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public
+    @ResponseBody
+        // Folder getFolderByName(@PathVariable("projectName") String projectName, @PathVariable("projectName") String projectName ,@PathVariable("projectName") String projectName) {
+    Folder getFolderLevel3(@PathVariable("projectName") String projectName, @PathVariable("projectName2") String projectName2, @PathVariable("projectName3") String projectName3) {
+        // TODO découper l'url des jobs en 3 parties projectName -> project1Name (Functional-tests) / project2Name (Tempest) / project3Name (
+        Folder folder = this.folderService.getFolder(getJenkinsFolderPath(projectName, projectName2, projectName3));
+        return folder;
+    }
 }

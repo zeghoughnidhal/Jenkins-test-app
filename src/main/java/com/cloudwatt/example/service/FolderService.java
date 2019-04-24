@@ -6,15 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import java.security.cert.X509Certificate;
 
 @Service
 public class FolderService {
@@ -50,8 +47,8 @@ public class FolderService {
 
         // TODO ajouter header avec user et token
 
-        String fooResourceUrl = "https://ci.int0.aub.cloudwatt.net/";
-        projectName = "job/Functional-tests/job/Tempest/job/ScheduleTempest";
+        String fooResourceUrl = "https://ci.int0.aub.cloudwatt.net";
+//        projectName = "/job/Functional-tests/job/Tempest/job/ScheduleTempest";
 
 
         HttpHeaders headers = new HttpHeaders();
