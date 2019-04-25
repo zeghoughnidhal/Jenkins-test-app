@@ -4,7 +4,6 @@ import com.cloudwatt.example.ApplicationConfiguration;
 import com.cloudwatt.example.domain.jenkins.Folder;
 import com.cloudwatt.example.domain.jenkins.Job;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
