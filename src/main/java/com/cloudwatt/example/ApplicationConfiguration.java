@@ -7,9 +7,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +21,8 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 
-@Configuration
+@Configuration()
+@ConfigurationProperties(prefix = "specific")
 @PropertySource("classpath:application.yml")
 public class ApplicationConfiguration {
 
@@ -31,6 +31,9 @@ public class ApplicationConfiguration {
 
     @Value("${jenkins_token}")
     private String token;
+
+    @Value("${jenkins_base_url}")
+    private String url;
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -76,14 +79,8 @@ public class ApplicationConfiguration {
         return restTemplate;
     }
 
-/*    private class AuthorizationInterceptor implements ClientHttpRequestInterceptor {
+    public String getUrl() {
+        return url;
+    }
 
-        @Override
-        public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-            HttpHeaders headers = request.getHeaders();
-            // TODO avec les  vrais user et mdp
-            headers.setBasicAuth("", "59bec667a95aa18b1f8d5fecd49d987e");
-            return execution.execute(request, body);
-        }
-    }*/
 }

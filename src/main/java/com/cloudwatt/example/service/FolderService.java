@@ -1,26 +1,27 @@
 package com.cloudwatt.example.service;
 
+import com.cloudwatt.example.ApplicationConfiguration;
 import com.cloudwatt.example.domain.jenkins.Folder;
 import com.cloudwatt.example.domain.jenkins.Job;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
+import java.util.Map;
 
 @Service
-@PropertySource("classpath:application.yml")
 public class FolderService {
 
-    @Value("${jenkins_base_url}")
-    private String url;
+    @Autowired
+    private ApplicationConfiguration configuration;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -32,13 +33,7 @@ public class FolderService {
     private ServiceProperties serviceProperties;
 
     @Cacheable
-    public Folder getFolder(String projectName) {
-        //Depth 1
-
-        // URL dataFolder = Resources.getResource(projectName);
-
-        Folder folder = new Folder();
-
+    public Folder getFolder(String projectName, Integer depth) {
 
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
@@ -47,61 +42,40 @@ public class FolderService {
             }
         });
 
-        // convert JSON string to Map
 
-        // serviceProperties.getName();
+        String fooResourceUrl = configuration.getUrl();
 
-        // TODO récupérer l'url de la conf
-        String fooResourceUrl = "https://ci.int0.aub.cloudwatt.net";
-//        projectName = "/job/Functional-tests/job/Tempest/job/ScheduleTempest";
+        Map<String, Integer> queryParams = Maps.newHashMap();
+        queryParams.put("depth", depth);
 
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl(fooResourceUrl + projectName + "/api/json")
+                .queryParam("depth", depth);
 
-        HttpHeaders headers = new HttpHeaders();
-        // headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBasicAuth("i...", "");
+        Folder response = restTemplate.getForObject(builder.build().toString(), Folder.class);
 
-
-        Folder response = restTemplate.getForObject(fooResourceUrl + projectName + "/api/json", Folder.class);
-        // assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-
-//         Job job = new Job();
-        // response.getJobs().stream().forEach(j -> extractEnvFrom(j));
         for (Job j : response.getJobs()) {
-            String env = extractEnvFrom(j.getName());
-
+            j.setEnv(extractEnvFrom(j.getName()));
         }
 
-        // extractEnvFrom(job, "test-int4");
-        // System.out.println(job.envJob);
-
-//        try {
-//            folder = objectMapper.readValue(dataFolder, Folder.class);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        return folder;
+        return response;
     }
 
     public String extractEnvFrom(String name) {
-
 
         if (name == null || name.equals("")) {
             return "NO_ENV";
         }
 
         String[] elements = name.split("-");
-        if (elements.length==1) {
+        if (elements.length == 1) {
             return "NO_ENV";
         }
 
 
-
-        return elements[elements.length-1];
-
-
+        return elements[elements.length - 1];
     }
-     }
+}
 
 
 

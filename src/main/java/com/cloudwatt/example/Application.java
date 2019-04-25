@@ -12,15 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-/*
- * This is the main Spring Boot application class. It configures Spring Boot, JPA, Swagger
- */
+
 
 @Configuration
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 // Sprint Boot Auto Configuration
 @ComponentScan(basePackages = "com.cloudwatt.example")
-@EnableJpaRepositories("com.cloudwatt.example.dao.jpa") // To segregate MongoDB and JPA repositories. Otherwise not needed.
+@EnableJpaRepositories("com.cloudwatt.example.dao.jpa")
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 

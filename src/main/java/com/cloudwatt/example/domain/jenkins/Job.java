@@ -72,7 +72,7 @@ public class Job implements Serializable {
     private Object scm;
     @JsonProperty("upstreamProjects")
     private List<Object> upstreamProjects = null;
-
+    @JsonProperty("env")
     private String env;
 
 
