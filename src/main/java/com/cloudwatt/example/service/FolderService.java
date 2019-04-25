@@ -4,7 +4,9 @@ import com.cloudwatt.example.domain.jenkins.Folder;
 import com.cloudwatt.example.domain.jenkins.Job;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +16,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 @Service
+@PropertySource("classpath:application.yml")
 public class FolderService {
+
+    @Value("${jenkins_base_url}")
+    private String url;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -45,8 +51,7 @@ public class FolderService {
 
         // serviceProperties.getName();
 
-        // TODO ajouter header avec user et token
-
+        // TODO récupérer l'url de la conf
         String fooResourceUrl = "https://ci.int0.aub.cloudwatt.net";
 //        projectName = "/job/Functional-tests/job/Tempest/job/ScheduleTempest";
 
