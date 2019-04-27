@@ -1,6 +1,7 @@
 package com.cloudwatt.example.api.rest;
 
 import com.cloudwatt.example.domain.jenkins.Folder;
+import com.cloudwatt.example.domain.jenkins.Job;
 import com.cloudwatt.example.service.FolderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
+import java.util.List;
 
 /*
  * Demonstrates how to set up RESTful API endpoints using Spring MVC
@@ -50,6 +52,21 @@ public class FolderController extends AbstractRestHandler {
             @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) {
         return this.folderService.getFolder(getJenkinsFolderPath(projectName, projectName2), depth);
     }
+
+
+
+
+    @RequestMapping(value = "jobs/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of  hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody List<Job> getJobsLevel2(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2) {
+        return this.folderService.getJobsFrom(getJenkinsFolderPath(projectName, projectName2), 0);
+    }
+
+
+
 
     @RequestMapping(value = "/{projectName}/{projectName2}/{projectName3}", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)

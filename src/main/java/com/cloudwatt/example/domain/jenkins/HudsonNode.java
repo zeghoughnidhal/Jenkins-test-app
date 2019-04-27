@@ -1,19 +1,18 @@
 package com.cloudwatt.example.domain.jenkins;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Job implements Serializable {
+public class HudsonNode {
 
-    private static final long serialVersionUID = -1l;
+
+    //Common fields
 
     @JsonProperty("_class")
     private String _class;
     @JsonProperty("actions")
-    private List<Object> actions = null;
+    private List<Object> actions;
     @JsonProperty("description")
     private String description;
     @JsonProperty("displayName")
@@ -28,6 +27,12 @@ public class Job implements Serializable {
     private String name;
     @JsonProperty("url")
     private String url;
+    @JsonProperty("jobs")
+    private List<HudsonNode> jobs;
+
+
+    //Job fields
+
     @JsonProperty("buildable")
     private Boolean buildable;
     @JsonProperty("builds")
@@ -75,9 +80,9 @@ public class Job implements Serializable {
     @JsonProperty("env")
     private String env;
 
-    private String folderName;
 
-    public Job() {
+    // Constructor
+    public HudsonNode() {
     }
 
     public String get_class() {
@@ -150,6 +155,14 @@ public class Job implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public List<HudsonNode> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<HudsonNode> jobs) {
+        this.jobs = jobs;
     }
 
     public Boolean getBuildable() {
@@ -334,13 +347,5 @@ public class Job implements Serializable {
 
     public void setEnv(String env) {
         this.env = env;
-    }
-
-    public String getFolderName() {
-        return folderName;
-    }
-
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
     }
 }
