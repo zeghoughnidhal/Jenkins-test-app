@@ -19,9 +19,9 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/api/v1/folders")
+@RequestMapping(value = "/api/folders")
 @Api(tags = {"Folder"})
-public class FolderController extends AbstractRestHandler {
+public class  FolderController extends AbstractRestHandler {
 
     @Autowired
     private FolderService folderService;
