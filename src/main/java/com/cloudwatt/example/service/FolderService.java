@@ -36,18 +36,16 @@ public class FolderService {
     private ServiceProperties serviceProperties;
 
     public FolderService() {
-    }
-
-    @Cacheable
-    public Folder getFolder(String projectName, Integer depth) {
-
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String s, SSLSession sslSession) {
                 return true;
             }
         });
+    }
 
+    @Cacheable
+    public Folder getFolder(String projectName, Integer depth) {
 
         String fooResourceUrl = configuration.getUrl();
 
@@ -72,13 +70,6 @@ public class FolderService {
     }
 
     private List<Job> getJobsFromUrl(String fullUrl) {
-
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String s, SSLSession sslSession) {
-                return true;
-            }
-        });
 
         ArrayList<Job> foundedJobs = Lists.newArrayList();
 
