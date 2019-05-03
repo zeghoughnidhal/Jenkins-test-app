@@ -1,35 +1,38 @@
 package com.cloudwatt.example.domain.jenkins;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Folder implements Serializable {
-
-    private static final long serialVersionUID= -1l;
+public class HudsonCore {
 
     @JsonProperty("_class")
-    public String _class;
+    private String _class;
     @JsonProperty("actions")
     private List<Object> actions;
     @JsonProperty("description")
-    public String description;
+    private String description;
     @JsonProperty("displayName")
-    public String displayName;
+    private String displayName;
     @JsonProperty("displayNameOrNull")
-    public Object displayNameOrNull;
+    private Object displayNameOrNull;
     @JsonProperty("fullDisplayName")
-    public String fullDisplayName;
+    private String fullDisplayName;
     @JsonProperty("fullName")
-    public String fullName;
+    private String fullName;
     @JsonProperty("name")
-    public String name;
+    private String name;
     @JsonProperty("url")
-    public String url;
+    private String url;
+    @JsonProperty("color")
+    private String color;
     @JsonProperty("jobs")
-    private List<Job> jobs;
+    private List<HudsonNode> jobs;
+
+    // Constructor
+
+    public HudsonCore() {
+    }
 
     public String get_class() {
         return _class;
@@ -103,14 +106,20 @@ public class Folder implements Serializable {
         this.url = url;
     }
 
-    public List<Job> getJobs() {
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public List<HudsonNode> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<Job> jobs) {
+    public void setJobs(List<HudsonNode> jobs) {
         this.jobs = jobs;
     }
 
-    public Folder() {
-    }
 }

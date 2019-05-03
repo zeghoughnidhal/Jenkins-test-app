@@ -1,10 +1,13 @@
 package com.cloudwatt.example.service;
 
 import com.cloudwatt.example.ApplicationConfiguration;
-import com.cloudwatt.example.domain.jenkins.Folder;
+import com.cloudwatt.example.domain.jenkins.HudsonFolder;
 import com.cloudwatt.example.domain.jenkins.HudsonNode;
-import com.cloudwatt.example.domain.jenkins.Job;
+import com.cloudwatt.example.domain.jenkins.HudsonJob;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +20,12 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @Service
 public class FolderService {
@@ -35,17 +42,49 @@ public class FolderService {
     @Autowired
     private ServiceProperties serviceProperties;
 
+    private Logger logger = Logger.getLogger("");
+
+    private LoadingCache<String, HudsonFolder> cacheFolders;
+    private LoadingCache<String, HudsonJob> cacheJobs;
+
     public FolderService() {
+
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String s, SSLSession sslSession) {
                 return true;
             }
         });
+
+        cacheFolders = CacheBuilder.newBuilder()
+                // .maximumSize(1000)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .build(
+                        new CacheLoader<String, HudsonFolder>() {
+                            public HudsonFolder load(String key) {
+                                logger.info("Call Jenkins on : " + key);
+                                UriComponentsBuilder builder = UriComponentsBuilder
+                                        .fromHttpUrl(key + "/api/json");
+                               return restTemplate.getForObject(builder.build().toString(), HudsonFolder.class);
+                            }
+                        });
+
+        cacheJobs = CacheBuilder.newBuilder()
+                // .maximumSize(1000)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .build(
+                        new CacheLoader<String, HudsonJob>() {
+                            public HudsonJob load(String key) {
+                                logger.info("Call Jenkins on : " + key);
+                                UriComponentsBuilder builder = UriComponentsBuilder
+                                        .fromHttpUrl(key + "/api/json");
+                                return restTemplate.getForObject(builder.build().toString(), HudsonJob.class);
+                            }
+                        });
     }
 
     @Cacheable
-    public Folder getFolder(String projectName, Integer depth) {
+    public HudsonFolder getFolder(String projectName, Integer depth) {
 
         String fooResourceUrl = configuration.getUrl();
 
@@ -56,40 +95,76 @@ public class FolderService {
                 .fromHttpUrl(fooResourceUrl + projectName + "/api/json")
                 .queryParam("depth", depth);
 
-        Folder response = restTemplate.getForObject(builder.build().toString(), Folder.class);
+        HudsonFolder response = restTemplate.getForObject(builder.build().toString(), HudsonFolder.class);
 
-        for (Job j : response.getJobs()) {
+        for (HudsonNode j : response.getJobs()) {
             j.setEnv(extractEnvFrom(j.getName()));
         }
 
         return response;
     }
 
-    public List<Job> getJobsFrom(String folderPath) {
+    public Map<String, Object> getFolderForView(String folderPath) throws ExecutionException {
+
+        HashMap<String, Object> folderForView = Maps.newHashMap();
+        List<String> folders = Lists.newArrayList();
+        List<HudsonJob> jobs = Lists.newArrayList();
+
+        HudsonFolder folder = cacheFolders.get(configuration.getUrl() + folderPath);
+
+        for (HudsonNode node : folder.getJobs()) {
+            if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
+                // in case of Folder, add it to the list of folders
+                folders.add(node.getName());
+            } else {
+                // get full data of the job
+                HudsonJob job = cacheJobs.get(node.getUrl());
+
+                if (job != null) {
+                    // mapping additional attributes
+                    job.setEnv(extractEnvFrom(node.getName()));
+                    job.setFolderName(folder.getName());
+                    job.setViewName(extractNameFrom(node.getName()));
+                    // add to returned list
+                    jobs.add(job);
+                }
+            }
+        }
+
+        folderForView.put("sub_folders", folders);
+        folderForView.put("jobs", jobs);
+
+        return folderForView;
+    }
+
+    public List<HudsonJob> getJobsFrom(String folderPath) throws ExecutionException {
         return getJobsFromUrl(configuration.getUrl() + folderPath);
     }
 
-    private List<Job> getJobsFromUrl(String fullUrl) {
+    private List<HudsonJob> getJobsFromUrl(String fullUrl) throws ExecutionException {
 
-        ArrayList<Job> foundedJobs = Lists.newArrayList();
+        ArrayList<HudsonJob> foundedJobs = Lists.newArrayList();
 
-        UriComponentsBuilder builder;
-        builder = UriComponentsBuilder.fromHttpUrl(fullUrl + "/api/json?depth=2");
-
-        System.out.println("Call Jenkins on : " + fullUrl);
-        HudsonNode hudsonNode = restTemplate.getForObject(builder.build().toString(), HudsonNode.class);
+        HudsonFolder hudsonNode = cacheFolders.get(fullUrl);
 
         for (HudsonNode node : hudsonNode.getJobs()) {
+            String nodeUrl = node.getUrl();
             if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
-                String nodeUrl = node.getUrl();
-                foundedJobs.addAll(getJobsFromUrl(nodeUrl));
+                // in case of Folder, call the method again to scan it
+                List<HudsonJob> jobsFromUrl = getJobsFromUrl(nodeUrl);
+                // add to returned list
+                foundedJobs.addAll(jobsFromUrl);
             } else {
-                Job job = new Job();
-                job.setName(extractNameFrom(node.getName()));
-                job.setFolderName(hudsonNode.getName());
-                job.setColor(node.getColor());
-                job.setEnv(extractEnvFrom(node.getName()));
-                foundedJobs.add(job);
+                // get full data of the job
+                HudsonJob job = cacheJobs.get(nodeUrl);
+                if (job != null) {
+                    // mapping additional attributes
+                    job.setEnv(extractEnvFrom(node.getName()));
+                    job.setFolderName(hudsonNode.getName());
+                    job.setViewName(extractNameFrom(node.getName()));
+                    // add to returned list
+                    foundedJobs.add(job);
+                }
             }
         }
 
