@@ -21,24 +21,22 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/folders")
 @Api(tags = {"Folder"})
-public class  FolderController extends AbstractRestHandler {
+public class FolderController extends AbstractRestHandler {
 
     @Autowired
     private FolderService folderService;
 
-    private String getJenkinsFolderPath(String... folders) {
-        String path = "";
-        for (String folder : folders) {
-            path += "/job/" + folder;
-        }
-        return path;
-    }
+    /*-------------------------------------------------------------------------------------*/
+    // Folders
+    /*-------------------------------------------------------------------------------------*/
 
     @RequestMapping(value = "/{projectName}", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public @ResponseBody Folder getFolderLevel1(@PathVariable("projectName") String projectName,
-        @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) {
+    public @ResponseBody
+    Folder getFolderLevel1(
+            @PathVariable("projectName") String projectName,
+            @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) {
 
         return this.folderService.getFolder(getJenkinsFolderPath(projectName), depth);
     }
@@ -46,7 +44,8 @@ public class  FolderController extends AbstractRestHandler {
     @RequestMapping(value = "/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public @ResponseBody Folder getFolderLevel2(
+    public @ResponseBody
+    Folder getFolderLevel2(
             @PathVariable("projectName") String projectName,
             @PathVariable("projectName2") String projectName2,
             @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) {
@@ -54,29 +53,65 @@ public class  FolderController extends AbstractRestHandler {
     }
 
 
-
-
-    @RequestMapping(value = "jobs/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a paginated list of  hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public @ResponseBody List<Job> getJobsLevel2(
-            @PathVariable("projectName") String projectName,
-            @PathVariable("projectName2") String projectName2) {
-        return this.folderService.getJobsFrom(getJenkinsFolderPath(projectName, projectName2), 0);
-    }
-
-
-
-
     @RequestMapping(value = "/{projectName}/{projectName2}/{projectName3}", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public @ResponseBody Folder getFolderLevel3(
+    public @ResponseBody
+    Folder getFolderLevel3(
             @PathVariable("projectName") String projectName,
             @PathVariable("projectName2") String projectName2,
             @PathVariable("projectName3") String projectName3,
             @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) {
 
         return this.folderService.getFolder(getJenkinsFolderPath(projectName, projectName2, projectName3), depth);
+    }
+
+    /*-------------------------------------------------------------------------------------*/
+    // Jobs
+    /*-------------------------------------------------------------------------------------*/
+
+    @RequestMapping(value = "jobs/{projectName}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of  hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<Job> getJobsLevel1(
+            @PathVariable("projectName") String projectName) {
+        return this.folderService.getJobsFrom(getJenkinsFolderPath(projectName));
+    }
+
+
+    @RequestMapping(value = "jobs/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of  hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<Job> getJobsLevel2(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2) {
+        return this.folderService.getJobsFrom(getJenkinsFolderPath(projectName, projectName2));
+    }
+
+
+    @RequestMapping(value = "jobs/{projectName}/{projectName2}/{projectName3}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<Job> getJobsLevel3(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2,
+            @PathVariable("projectName3") String projectName3) {
+
+        return this.folderService.getJobsFrom(getJenkinsFolderPath(projectName, projectName2, projectName3));
+    }
+
+    /*-------------------------------------------------------------------------------------*/
+    // Methods
+    /*-------------------------------------------------------------------------------------*/
+
+    private String getJenkinsFolderPath(String... folders) {
+        String path = "";
+        for (String folder : folders) {
+            path += "/job/" + folder;
+        }
+        return path;
     }
 }
