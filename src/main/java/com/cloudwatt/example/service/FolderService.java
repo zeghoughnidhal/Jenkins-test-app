@@ -67,7 +67,11 @@ public class FolderService {
         return response;
     }
 
-    public List<Job> getJobsFrom(String folderPath, Integer level) {
+    public List<Job> getJobsFrom(String folderPath) {
+        return getJobsFromUrl(configuration.getUrl() + folderPath);
+    }
+
+    private List<Job> getJobsFromUrl(String fullUrl) {
 
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
@@ -79,20 +83,15 @@ public class FolderService {
         ArrayList<Job> foundedJobs = Lists.newArrayList();
 
         UriComponentsBuilder builder;
-        if (level == 0) {
-            builder = UriComponentsBuilder.fromHttpUrl(configuration.getUrl() + folderPath + "/api/json");
-        } else {
-            builder = UriComponentsBuilder.fromHttpUrl(folderPath + "/api/json");
-        }
+        builder = UriComponentsBuilder.fromHttpUrl(fullUrl + "/api/json?depth=2");
 
-        System.out.println("Call Jenkins on : " + folderPath);
+        System.out.println("Call Jenkins on : " + fullUrl);
         HudsonNode hudsonNode = restTemplate.getForObject(builder.build().toString(), HudsonNode.class);
 
         for (HudsonNode node : hudsonNode.getJobs()) {
             if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
                 String nodeUrl = node.getUrl();
-                int subLevel = level + 1;
-                foundedJobs.addAll(getJobsFrom(nodeUrl, subLevel));
+                foundedJobs.addAll(getJobsFromUrl(nodeUrl));
             } else {
                 Job job = new Job();
                 job.setName(extractNameFrom(node.getName()));
@@ -106,7 +105,7 @@ public class FolderService {
         return foundedJobs;
     }
 
-    public String extractEnvFrom(String name) {
+    protected String extractEnvFrom(String name) {
 
         if (name == null || name.equals("")) {
             return "NO_ENV";
@@ -121,7 +120,7 @@ public class FolderService {
         return elements[elements.length - 1];
     }
 
-    public String extractNameFrom(String name) {
+    protected String extractNameFrom(String name) {
 
         if (name == null || name.equals("")) {
             return "NO_NAME";
