@@ -6,34 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 
-public class Job implements Serializable {
+public class HudsonJob extends HudsonNode implements Serializable {
 
     private static final long serialVersionUID = -1l;
 
-    @JsonProperty("_class")
-    private String _class;
-    @JsonProperty("actions")
-    private List<Object> actions = null;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("displayName")
-    private String displayName;
-    @JsonProperty("displayNameOrNull")
-    private Object displayNameOrNull;
-    @JsonProperty("fullDisplayName")
-    private String fullDisplayName;
-    @JsonProperty("fullName")
-    private String fullName;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("url")
-    private String url;
     @JsonProperty("buildable")
     private Boolean buildable;
     @JsonProperty("builds")
     private List<Object> builds = null;
-    @JsonProperty("color")
-    private String color;
     @JsonProperty("firstBuild")
     private Object firstBuild;
     @JsonProperty("healthReport")
@@ -72,84 +52,18 @@ public class Job implements Serializable {
     private Object scm;
     @JsonProperty("upstreamProjects")
     private List<Object> upstreamProjects = null;
-    @JsonProperty("env")
-    private String env;
 
-    private String folderName;
 
-    public Job() {
+    public HudsonJob() {
+        super();
     }
 
-    public String get_class() {
-        return _class;
+    public HudsonJob(HudsonNode fromNode) {
+
     }
 
-    public void set_class(String _class) {
-        this._class = _class;
-    }
-
-    public List<Object> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<Object> actions) {
-        this.actions = actions;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public Object getDisplayNameOrNull() {
-        return displayNameOrNull;
-    }
-
-    public void setDisplayNameOrNull(Object displayNameOrNull) {
-        this.displayNameOrNull = displayNameOrNull;
-    }
-
-    public String getFullDisplayName() {
-        return fullDisplayName;
-    }
-
-    public void setFullDisplayName(String fullDisplayName) {
-        this.fullDisplayName = fullDisplayName;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public Boolean getBuildable() {
@@ -166,14 +80,6 @@ public class Job implements Serializable {
 
     public void setBuilds(List<Object> builds) {
         this.builds = builds;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public Object getFirstBuild() {
@@ -328,19 +234,4 @@ public class Job implements Serializable {
         this.upstreamProjects = upstreamProjects;
     }
 
-    public String getEnv() {
-        return env;
-    }
-
-    public void setEnv(String env) {
-        this.env = env;
-    }
-
-    public String getFolderName() {
-        return folderName;
-    }
-
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
-    }
 }
