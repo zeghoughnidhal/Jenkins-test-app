@@ -155,7 +155,7 @@ public class FolderController extends AbstractRestHandler {
     @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
     public @ResponseBody
     Map<String, List<HudsonJob>> getJobsForViewRoot() throws ExecutionException {
-        return this.folderService.getJobsRecursiveModeForMatrixViewFrom("");
+        return this.folderService.getJobsByEnvRecursiveModeForMatrixViewFrom("");
     }
 
     @RequestMapping(value = "/forView/jobs/{projectName}", method = RequestMethod.GET, produces = {"application/json"})
@@ -164,7 +164,7 @@ public class FolderController extends AbstractRestHandler {
     public @ResponseBody
     Map<String, List<HudsonJob>> getJobsForViewLevel1(
             @PathVariable("projectName") String projectName) throws ExecutionException {
-        return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName));
+        return this.folderService.getJobsByEnvRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName));
     }
 
     @RequestMapping(value = "/forView/jobs/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
@@ -174,9 +174,8 @@ public class FolderController extends AbstractRestHandler {
     Map<String, List<HudsonJob>> getJobsForViewLevel2(
             @PathVariable("projectName") String projectName,
             @PathVariable("projectName2") String projectName2) throws ExecutionException {
-        return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2));
+        return this.folderService.getJobsByEnvRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2));
     }
-
 
     @RequestMapping(value = "/forView/jobs/{projectName}/{projectName2}/{projectName3}", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
@@ -186,9 +185,42 @@ public class FolderController extends AbstractRestHandler {
             @PathVariable("projectName") String projectName,
             @PathVariable("projectName2") String projectName2,
             @PathVariable("projectName3") String projectName3) throws ExecutionException {
-        return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2, projectName3));
+        return this.folderService.getJobsByEnvRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2, projectName3));
     }
 
+    /*-------------------------------------------------------------------------------------*/
+    // /forView/metrics
+    /*-------------------------------------------------------------------------------------*/
+
+    @RequestMapping(value = "/forView/metrics/{projectName}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    Map<String, Object> getMetricsForViewLevel1(
+            @PathVariable("projectName") String projectName) throws ExecutionException {
+        return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName));
+    }
+
+    @RequestMapping(value = "/forView/metrics/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    Map<String, Object> getMetricsForViewLevel2(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2) throws ExecutionException {
+        return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2));
+    }
+
+    @RequestMapping(value = "/forView/metrics/{projectName}/{projectName2}/{projectName3}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    Map<String, Object> getMetricsForViewLevel3(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2,
+            @PathVariable("projectName3") String projectName3) throws ExecutionException {
+        return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2, projectName3));
+    }
 
     /*-------------------------------------------------------------------------------------*/
     // Methods

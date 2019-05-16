@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 
-public class HudsonJob extends HudsonNode implements Serializable {
+public class HudsonJob extends HudsonNode implements Serializable, Comparable {
 
     private static final long serialVersionUID = -1l;
 
@@ -234,4 +234,8 @@ public class HudsonJob extends HudsonNode implements Serializable {
         this.upstreamProjects = upstreamProjects;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        return this.getViewName().compareTo(((HudsonJob) o).getViewName());
+    }
 }
