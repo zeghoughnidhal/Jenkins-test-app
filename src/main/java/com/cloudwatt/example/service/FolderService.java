@@ -10,6 +10,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,9 @@ public class FolderService {
                             public HudsonJob load(String key) {
                                 logger.info("Call Jenkins on : " + key);
                                 UriComponentsBuilder builder = UriComponentsBuilder
-                                        .fromHttpUrl(key + "/api/json");
+                                        .fromHttpUrl(key)
+                                        .path("/api/json")
+                                        .queryParam("depth", 2);
                                 return restTemplate.getForObject(builder.build().toString(), HudsonJob.class);
                             }
                         });
@@ -113,18 +116,17 @@ public class FolderService {
         HudsonFolder folder = cacheFolders.get(configuration.getUrl() + folderPath);
 
         for (HudsonNode node : folder.getJobs()) {
+            String nodeName = node.getName();
             if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
                 // in case of Folder, add it to the list of folders
-                folders.add(node.getName());
+                folders.add(nodeName);
             } else {
                 // get full data of the job
                 HudsonJob job = cacheJobs.get(node.getUrl());
 
                 if (job != null) {
                     // mapping additional attributes
-                    job.setEnv(extractEnvFrom(node.getName()));
-                    job.setFolderName(folder.getName());
-                    job.setViewName(extractNameFrom(node.getName()));
+                    mappingJob(job, folder.getName(), nodeName);
                     // add to returned list
                     jobs.add(job);
                 }
@@ -137,21 +139,21 @@ public class FolderService {
         return folderForView;
     }
 
-    public List<HudsonJob> getJobsFrom(String folderPath) throws ExecutionException {
-        return getJobsFromUrl(configuration.getUrl() + folderPath);
+    public List<HudsonJob> getJobsRecursiveModeFrom(String folderPath) throws ExecutionException {
+        return getJobsRecursiveFromUrl(configuration.getUrl() + folderPath);
     }
 
-    private List<HudsonJob> getJobsFromUrl(String fullUrl) throws ExecutionException {
+    private List<HudsonJob> getJobsRecursiveFromUrl(String fullUrl) throws ExecutionException {
 
         ArrayList<HudsonJob> foundedJobs = Lists.newArrayList();
 
-        HudsonFolder hudsonNode = cacheFolders.get(fullUrl);
+        HudsonFolder folder = cacheFolders.get(fullUrl);
 
-        for (HudsonNode node : hudsonNode.getJobs()) {
+        for (HudsonNode node : folder.getJobs()) {
             String nodeUrl = node.getUrl();
             if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
                 // in case of Folder, call the method again to scan it
-                List<HudsonJob> jobsFromUrl = getJobsFromUrl(nodeUrl);
+                List<HudsonJob> jobsFromUrl = getJobsRecursiveFromUrl(nodeUrl);
                 // add to returned list
                 foundedJobs.addAll(jobsFromUrl);
             } else {
@@ -159,9 +161,7 @@ public class FolderService {
                 HudsonJob job = cacheJobs.get(nodeUrl);
                 if (job != null) {
                     // mapping additional attributes
-                    job.setEnv(extractEnvFrom(node.getName()));
-                    job.setFolderName(hudsonNode.getName());
-                    job.setViewName(extractNameFrom(node.getName()));
+                    mappingJob(job, folder.getName(), node.getName());
                     // add to returned list
                     foundedJobs.add(job);
                 }
@@ -169,6 +169,69 @@ public class FolderService {
         }
 
         return foundedJobs;
+    }
+
+    public Map<String, List<HudsonJob>> getJobsRecursiveModeForMatrixViewFrom(String folderPath) throws ExecutionException {
+        return getJobsRecursiveModeForMatrixViewFromUrl(configuration.getUrl() + folderPath);
+    }
+
+    private Map<String, List<HudsonJob>> getJobsRecursiveModeForMatrixViewFromUrl(String fullUrl) throws ExecutionException {
+
+        // mappingJob format de reponse avec une clé pour chaque environnement
+        // chaque clé contient un tableau de jobs dont l'attribut "env" correspond à la clé
+        // => structure de réponse => JSON ( == HashMap en Java)
+        // exemple :
+        // {
+        //   "envs" : ["dev0", dev2", dev3"],
+        //   "jobs" : {
+        //      "tempest (name du Job)" : {
+        //          "dev0" : {HudsonJob}
+        //          "dev2" : {HudsonJob}
+        //      },
+        //      "tempest (name du Job)" : {
+        //          "dev3" : {HudsonJob}
+        //      },
+        // }
+        HashMap<String, List<HudsonJob>> jobsByEnvironment = Maps.newHashMap();
+
+
+        HudsonFolder folder = cacheFolders.get(fullUrl);
+
+        for (HudsonNode node : folder.getJobs()) {
+            String nodeUrl = StringUtils.urlDecode(node.getUrl());
+            if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
+                // in case of Folder, call the method again to scan it
+                Map<String, List<HudsonJob>> subfolderJobs = getJobsRecursiveModeForMatrixViewFromUrl(nodeUrl);
+                // add founded jobs in the subfolder to the returned HashMap
+                for (String key : subfolderJobs.keySet()) {
+                    if (!jobsByEnvironment.containsKey(key)) {
+                        jobsByEnvironment.put(key, Lists.newArrayList());
+                    }
+                    jobsByEnvironment.get(key).addAll(subfolderJobs.get(key));
+                }
+            } else {
+                // get full data of the job
+                HudsonJob job = cacheJobs.get(nodeUrl);
+                if (job != null) {
+                    // mapping additional attributes
+                    String env = extractEnvFrom(node.getName());
+                    mappingJob(job, folder.getName(), node.getName());
+                    // add to returned list
+                    if (!jobsByEnvironment.containsKey(env)) {
+                        jobsByEnvironment.put(env, Lists.newArrayList());
+                    }
+                    jobsByEnvironment.get(env).add(job);
+                }
+            }
+        }
+
+        return jobsByEnvironment;
+    }
+
+    private void mappingJob(HudsonJob job, String folderName, String nodeName) {
+        job.setFolderName(folderName);
+        job.setViewName(extractNameFrom(nodeName));
+        job.setEnv(extractEnvFrom(nodeName));
     }
 
     protected String extractEnvFrom(String name) {
