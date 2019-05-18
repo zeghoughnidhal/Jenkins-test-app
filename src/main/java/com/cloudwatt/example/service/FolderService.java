@@ -48,6 +48,7 @@ public class FolderService {
 
     public FolderService() {
 
+        // disable https check
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String s, SSLSession sslSession) {
@@ -55,6 +56,7 @@ public class FolderService {
             }
         });
 
+        // cache for folders
         cacheFolders = CacheBuilder.newBuilder()
                 // .maximumSize(1000)
                 .expireAfterWrite(10, TimeUnit.MINUTES)
@@ -68,6 +70,7 @@ public class FolderService {
                             }
                         });
 
+        // cache for jobs
         cacheJobs = CacheBuilder.newBuilder()
                 // .maximumSize(1000)
                 .expireAfterWrite(10, TimeUnit.MINUTES)
@@ -259,7 +262,7 @@ public class FolderService {
                 for (String jobName : subfolderJobs.keySet()) {
                     if (!jobsForMatrix.containsKey(jobName)) {
                         // this job does not exist in response yet..
-                        jobsForMatrix.put(jobName, subfolderMatrixView.get(jobName));
+                        jobsForMatrix.put(jobName, subfolderJobs.get(jobName));
                     } else {
                         Map<String, Object> jobEnvs = subfolderJobs.get(jobName);
                         for (String envName : jobEnvs.keySet()) {
@@ -281,11 +284,23 @@ public class FolderService {
                     mappingJob(job, folder.getName(), node.getName());
                     // env of the job to the envs returned list
                     envsForMatrix.add(job.getEnv());
-                    // add job into job list (if not exists for this jobName/env)
-                    if (!jobsForMatrix.containsKey(job.getViewName())) {
-                        HashMap<String, HudsonJob> jobForEnv = Maps.newHashMap();
-                        jobForEnv.put(job.getEnv(), job);
-                        jobsForMatrix.put(job.getViewName(), jobForEnv);
+                    // we need to add the job in the returned object
+                    // but first, create an object the key "env" and the job as value
+                    // example :
+                    // {
+                    //   "int" : {
+                    //     ... the job here ...
+                    //   }
+                    // }
+                    HashMap<String, HudsonJob> jobForEnv = Maps.newHashMap();
+                    jobForEnv.put(job.getEnv(), job);
+                    // then put it in the returned object at the "viewName" key
+                    String viewName = job.getViewName();
+                    if (!jobsForMatrix.containsKey(viewName)) {
+                        jobsForMatrix.put(viewName, jobForEnv);
+                    } else {
+                        Map jobsForMatrixForViewName = (Map) jobsForMatrix.get(viewName);
+                        jobsForMatrixForViewName.put(job.getEnv(), job);
                     }
                 }
             }
