@@ -227,6 +227,18 @@ public class FolderService {
 
     private Map<String, Object> getJobsRecursiveModeForMatrixViewFromUrl(String fullUrl) throws ExecutionException {
 
+        boolean handle = false;
+        // handle Folder
+        if (
+                fullUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests") ||
+                (
+                    fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Rally/") ||
+                    fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/")
+                )
+        ) {
+            handle = true;
+        }
+
         // mappingJob format de reponse avec une clé pour chaque environnement
         // chaque clé contient un tableau de jobs dont l'attribut "env" correspond à la clé
         // => structure de réponse => JSON ( == HashMap en Java)
@@ -245,64 +257,76 @@ public class FolderService {
         SortedSet<String> envsForMatrix = Sets.newTreeSet();
         HashMap<String, Object> jobsForMatrix = Maps.newHashMap();
 
-        HudsonFolder folder = cacheFolders.get(fullUrl);
+        if(handle) {
+            HudsonFolder folder = cacheFolders.get(fullUrl);
 
-        for (HudsonNode node : folder.getJobs()) {
-            String nodeUrl = StringUtils.urlDecode(node.getUrl());
-            if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
-                // in case of Folder, call the method again to scan it
-                Map<String, Object> subfolderMatrixView = getJobsRecursiveModeForMatrixViewFromUrl(nodeUrl);
+            for (HudsonNode node : folder.getJobs()) {
+                String nodeUrl = StringUtils.urlDecode(node.getUrl());
+                if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
+                    // in case of Folder, call the method again to scan it
+                    Map<String, Object> subfolderMatrixView = getJobsRecursiveModeForMatrixViewFromUrl(nodeUrl);
 
-                // add envs to current response
-                envsForMatrix.addAll((Set) subfolderMatrixView.get("envs"));
+                    // add envs to current response
+                    envsForMatrix.addAll((Set) subfolderMatrixView.get("envs"));
 
-                // add jobs to current response
-                Map<String, Map> subfolderJobs = (HashMap<String, Map>) subfolderMatrixView.get("jobs");
+                    // add jobs to current response
+                    Map<String, Map> subfolderJobs = (HashMap<String, Map>) subfolderMatrixView.get("jobs");
 
-                for (String jobName : subfolderJobs.keySet()) {
-                    if (!jobsForMatrix.containsKey(jobName)) {
-                        // this job does not exist in response yet..
-                        jobsForMatrix.put(jobName, subfolderJobs.get(jobName));
+                    for (String jobName : subfolderJobs.keySet()) {
+                        if (!jobsForMatrix.containsKey(jobName)) {
+                            // this job does not exist in response yet..
+                            jobsForMatrix.put(jobName, subfolderJobs.get(jobName));
+                        } else {
+                            Map<String, Object> jobEnvs = subfolderJobs.get(jobName);
+                            for (String envName : jobEnvs.keySet()) {
+
+                                Map<String, Object> o = (Map<String, Object>) jobsForMatrix.get(jobName);
+
+                                if (!((Map<String, Object>) jobsForMatrix.get(jobName)).containsKey(envName)) {
+                                    ((Map<String, Object>) jobsForMatrix.get(jobName)).put(envName,subfolderJobs.get(jobName).get(envName));
+                                }
+                            }
+
+                        }
+                    }
+                } else if ( nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/swift3/") ||
+                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-components/") ||
+                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-env-dev/") ||
+                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-roles/") ||
+                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-xsite-identity/")
+                    ) {
+                        handle = true;
                     } else {
-                        Map<String, Object> jobEnvs = subfolderJobs.get(jobName);
-                        for (String envName : jobEnvs.keySet()) {
+                        // get full data of the job
+                        HudsonJob job = cacheJobs.get(nodeUrl);
 
-                            Map<String, Object> o = (Map<String, Object>) jobsForMatrix.get(jobName);
 
-                            if (!((Map<String, Object>) jobsForMatrix.get(jobName)).containsKey(envName)) {
-                                ((Map<String, Object>) jobsForMatrix.get(jobName)).put(envName,subfolderJobs.get(jobName).get(envName));
+                        if (job != null) {
+                            // mapping additional attributes
+                            mappingJob(job, folder.getName(), node.getName());
+                            // env of the job to the envs returned list
+                            envsForMatrix.add(job.getEnv());
+                            // we need to add the job in the returned object
+                            // but first, create an object the key "env" and the job as value
+                            // example :
+                            // {
+                            //   "int" : {
+                            //     ... the job here ...
+                            //   }
+                            // }
+                            HashMap<String, HudsonJob> jobForEnv = Maps.newHashMap();
+                            jobForEnv.put(job.getEnv(), job);
+                            // then put it in the returned object at the "viewName" key
+                            String viewName = job.getViewName();
+                            if (!jobsForMatrix.containsKey(viewName)) {
+                                jobsForMatrix.put(viewName, jobForEnv);
+                            } else {
+                                Map jobsForMatrixForViewName = (Map) jobsForMatrix.get(viewName);
+                                jobsForMatrixForViewName.put(job.getEnv(), job);
                             }
                         }
 
                     }
-                }
-            } else {
-                // get full data of the job
-                HudsonJob job = cacheJobs.get(nodeUrl);
-                if (job != null) {
-                    // mapping additional attributes
-                    mappingJob(job, folder.getName(), node.getName());
-                    // env of the job to the envs returned list
-                    envsForMatrix.add(job.getEnv());
-                    // we need to add the job in the returned object
-                    // but first, create an object the key "env" and the job as value
-                    // example :
-                    // {
-                    //   "int" : {
-                    //     ... the job here ...
-                    //   }
-                    // }
-                    HashMap<String, HudsonJob> jobForEnv = Maps.newHashMap();
-                    jobForEnv.put(job.getEnv(), job);
-                    // then put it in the returned object at the "viewName" key
-                    String viewName = job.getViewName();
-                    if (!jobsForMatrix.containsKey(viewName)) {
-                        jobsForMatrix.put(viewName, jobForEnv);
-                    } else {
-                        Map jobsForMatrixForViewName = (Map) jobsForMatrix.get(viewName);
-                        jobsForMatrixForViewName.put(job.getEnv(), job);
-                    }
-                }
             }
         }
 
@@ -317,7 +341,7 @@ public class FolderService {
 
     private void mappingJob(HudsonJob job, String folderName, String nodeName) {
         job.setFolderName(folderName);
-        job.setViewName(extractNameFrom(nodeName));
+        job.setViewName(folderName + "-" + extractNameFrom(nodeName));
         job.setEnv(extractEnvFrom(nodeName));
     }
 
