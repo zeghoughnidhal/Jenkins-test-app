@@ -251,10 +251,10 @@ public class FolderService {
         // handle Folder
         if (
                 fullUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests") ||
-                        (
-                                fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Rally/") ||
-                                        fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/")
-                        )
+                (
+                    fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Rally/") ||
+                    fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/")
+                )
         ) {
             handle = true;
         }
@@ -356,6 +356,8 @@ public class FolderService {
 
         return forView;
     }
+
+
 
     //-------------------------------------------
 
@@ -469,6 +471,3 @@ public class FolderService {
 
     //-------------------------------------------
 }
-
-
-

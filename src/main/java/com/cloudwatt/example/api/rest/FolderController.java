@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping(value = "/api")
-@Api(tags = {"HudsonFolder"})
+@Api()
 public class FolderController extends AbstractRestHandler {
 
     @Autowired
@@ -307,7 +307,7 @@ public class FolderController extends AbstractRestHandler {
         for (String folder : folders) {
             path += "/job/" + folder;
         }
-        return path;
+        return path + "/";
     }
 
 
