@@ -4,7 +4,9 @@ import com.cloudwatt.example.ApplicationConfiguration;
 import com.cloudwatt.example.domain.jenkins.HudsonFolder;
 import com.cloudwatt.example.domain.jenkins.HudsonNode;
 import com.cloudwatt.example.domain.jenkins.HudsonJob;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -66,7 +68,7 @@ public class FolderService {
                                 logger.info("Call Jenkins on : " + key);
                                 UriComponentsBuilder builder = UriComponentsBuilder
                                         .fromHttpUrl(key + "/api/json");
-                               return restTemplate.getForObject(builder.build().toString(), HudsonFolder.class);
+                                return restTemplate.getForObject(builder.build().toString(), HudsonFolder.class);
                             }
                         });
 
@@ -231,10 +233,10 @@ public class FolderService {
         // handle Folder
         if (
                 fullUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests") ||
-                (
-                    fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Rally/") ||
-                    fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/")
-                )
+                        (
+                                fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Rally/") ||
+                                        fullUrl.startsWith("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/")
+                        )
         ) {
             handle = true;
         }
@@ -257,7 +259,7 @@ public class FolderService {
         SortedSet<String> envsForMatrix = Sets.newTreeSet();
         HashMap<String, Object> jobsForMatrix = Maps.newHashMap();
 
-        if(handle) {
+        if (handle) {
             HudsonFolder folder = cacheFolders.get(fullUrl);
 
             for (HudsonNode node : folder.getJobs()) {
@@ -283,50 +285,50 @@ public class FolderService {
                                 Map<String, Object> o = (Map<String, Object>) jobsForMatrix.get(jobName);
 
                                 if (!((Map<String, Object>) jobsForMatrix.get(jobName)).containsKey(envName)) {
-                                    ((Map<String, Object>) jobsForMatrix.get(jobName)).put(envName,subfolderJobs.get(jobName).get(envName));
+                                    ((Map<String, Object>) jobsForMatrix.get(jobName)).put(envName, subfolderJobs.get(jobName).get(envName));
                                 }
                             }
 
                         }
                     }
-                } else if ( nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/swift3/") ||
-                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-components/") ||
-                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-env-dev/") ||
-                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-roles/") ||
-                            nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-xsite-identity/")
-                    ) {
-                        handle = true;
-                    } else {
-                        // get full data of the job
-                        HudsonJob job = cacheJobs.get(nodeUrl);
+                } else if (nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/swift3/") ||
+                        nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-components/") ||
+                        nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-env-dev/") ||
+                        nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-roles/") ||
+                        nodeUrl.equals("https://ci.int0.aub.cloudwatt.net/job/Functional-tests/job/Tempest/job/tempest-xsite-identity/")
+                ) {
+                    handle = true;
+                } else {
+                    // get full data of the job
+                    HudsonJob job = cacheJobs.get(nodeUrl);
 
 
-                        if (job != null) {
-                            // mapping additional attributes
-                            mappingJob(job, folder.getName(), node.getName());
-                            // env of the job to the envs returned list
-                            envsForMatrix.add(job.getEnv());
-                            // we need to add the job in the returned object
-                            // but first, create an object the key "env" and the job as value
-                            // example :
-                            // {
-                            //   "int" : {
-                            //     ... the job here ...
-                            //   }
-                            // }
-                            HashMap<String, HudsonJob> jobForEnv = Maps.newHashMap();
-                            jobForEnv.put(job.getEnv(), job);
-                            // then put it in the returned object at the "viewName" key
-                            String viewName = job.getViewName();
-                            if (!jobsForMatrix.containsKey(viewName)) {
-                                jobsForMatrix.put(viewName, jobForEnv);
-                            } else {
-                                Map jobsForMatrixForViewName = (Map) jobsForMatrix.get(viewName);
-                                jobsForMatrixForViewName.put(job.getEnv(), job);
-                            }
+                    if (job != null) {
+                        // mapping additional attributes
+                        mappingJob(job, folder.getName(), node.getName());
+                        // env of the job to the envs returned list
+                        envsForMatrix.add(job.getEnv());
+                        // we need to add the job in the returned object
+                        // but first, create an object the key "env" and the job as value
+                        // example :
+                        // {
+                        //   "int" : {
+                        //     ... the job here ...
+                        //   }
+                        // }
+                        HashMap<String, HudsonJob> jobForEnv = Maps.newHashMap();
+                        jobForEnv.put(job.getEnv(), job);
+                        // then put it in the returned object at the "viewName" key
+                        String viewName = job.getViewName();
+                        if (!jobsForMatrix.containsKey(viewName)) {
+                            jobsForMatrix.put(viewName, jobForEnv);
+                        } else {
+                            Map jobsForMatrixForViewName = (Map) jobsForMatrix.get(viewName);
+                            jobsForMatrixForViewName.put(job.getEnv(), job);
                         }
-
                     }
+
+                }
             }
         }
 
@@ -386,7 +388,7 @@ public class FolderService {
         return "";
     }
 
-    protected String generateReportTestDetailUrl(String className, String name) {
+    protected String generateReportTestDetailUri(String className, String name) {
 
         StringBuilder detailUrl = new StringBuilder();
 
@@ -406,6 +408,11 @@ public class FolderService {
         String modifiedName = name
                 .replaceAll("\\[", "_")
                 .replaceAll("\\]", "_")
+                .replaceAll(",", "_")
+                .replaceAll("\\(", "_")
+                .replaceAll("\\)", "_")
+                .replaceAll("\\.", "_")
+                .replaceAll(" ", "_")
                 .replaceAll("-", "_");
 
         detailUrl.append("/").append(modifiedName);
@@ -413,6 +420,36 @@ public class FolderService {
         return detailUrl.toString();
     }
 
+    //-------------------------------------------
+    public ArrayList<ObjectNode> getBuildTestsReportFromUrl(String buildPath) throws ExecutionException {
+
+        ArrayList<ObjectNode> testOnErrorsList = Lists.newArrayList();
+
+        String buildTestsReportUrl = configuration.getUrl() + "/" + buildPath + "/testReport/";
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(buildTestsReportUrl + "/api/json");
+        JsonNode testResults = restTemplate.getForObject(builder.build().toString(), JsonNode.class);
+
+        for (JsonNode suite : testResults.get("suites")) {
+
+            for (JsonNode subcase : suite.get("cases")) {
+
+                ObjectNode subCaseAsObjectNode = (ObjectNode) subcase;
+
+                if (!subcase.get("status").asText().equals("PASSED")) {
+                    String detailOnErrorUrl = buildTestsReportUrl + generateReportTestDetailUri(subcase.get("className").asText(), subcase.get("name").asText());
+                    ObjectNode detailOnError = restTemplate.getForObject(detailOnErrorUrl + "/api/json", ObjectNode.class);
+                    String errorStackTrace = extractLastLine(detailOnError.get("errorStackTrace").asText());
+                    subCaseAsObjectNode.put("errorStackTrace", errorStackTrace);
+                    testOnErrorsList.add(subCaseAsObjectNode);
+                }
+            }
+        }
+
+        return testOnErrorsList;
+    }
+
+    //-------------------------------------------
 }
 
 

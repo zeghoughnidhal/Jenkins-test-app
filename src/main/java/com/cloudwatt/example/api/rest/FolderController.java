@@ -3,12 +3,18 @@ package com.cloudwatt.example.api.rest;
 import com.cloudwatt.example.domain.jenkins.HudsonFolder;
 import com.cloudwatt.example.domain.jenkins.HudsonJob;
 import com.cloudwatt.example.service.FolderService;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -222,6 +228,29 @@ public class FolderController extends AbstractRestHandler {
         return this.folderService.getJobsRecursiveModeForMatrixViewFrom(getJenkinsFolderPath(projectName, projectName2, projectName3));
     }
 
+
+    @RequestMapping(value = "/results/**", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody List<ObjectNode> getTestResult(
+            HttpServletRequest request) throws ExecutionException {
+
+        // split full URI into an Array
+        List<String> pathList = Splitter.on("/").splitToList(request.getRequestURI());
+
+        // get all array entries excepted to 2 firsts (/api/results/) and map the rest into a empty collection
+        List<String> extractedPath = Lists.newArrayList();
+
+        for (int i = 3; i <= pathList.size() - 2; i++) {
+            extractedPath.add(pathList.get(i));
+        }
+
+        String buildPath = getJenkinsFolderPath(extractedPath.toArray(new String[0])) + "/" + pathList.get(pathList.size() - 1);
+
+        return folderService.getBuildTestsReportFromUrl(buildPath);
+    }
+
+
     /*-------------------------------------------------------------------------------------*/
     // Methods
     /*-------------------------------------------------------------------------------------*/
@@ -233,4 +262,7 @@ public class FolderController extends AbstractRestHandler {
         }
         return path;
     }
+
+
+
 }
