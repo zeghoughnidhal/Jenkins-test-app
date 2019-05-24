@@ -375,6 +375,44 @@ public class FolderService {
         return elements[elements.length - 2];
     }
 
+
+    protected String extractLastLine(String allLines) {
+        String[] lines = allLines.split("\n");
+        for (int i = lines.length - 1; i >= 0; i--) {
+            if (!lines[i].trim().equals("")) {
+                return lines[i].trim();
+            }
+        }
+        return "";
+    }
+
+    protected String generateReportTestDetailUrl(String className, String name) {
+
+        StringBuilder detailUrl = new StringBuilder();
+
+        String[] pathTab = className.split("\\.");
+        for (int i = 0; i <= pathTab.length - 1; i++) {
+            if (i == pathTab.length - 1) {
+                detailUrl.append(pathTab[i]);
+                continue;
+            }
+            if (i == pathTab.length - 2) {
+                detailUrl.append(pathTab[i]).append("/");
+            } else {
+                detailUrl.append(pathTab[i]).append(".");
+            }
+        }
+
+        String modifiedName = name
+                .replaceAll("\\[", "_")
+                .replaceAll("\\]", "_")
+                .replaceAll("-", "_");
+
+        detailUrl.append("/").append(modifiedName);
+
+        return detailUrl.toString();
+    }
+
 }
 
 
