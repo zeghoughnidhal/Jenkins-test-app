@@ -143,6 +143,24 @@ public class FolderService {
         return folderForView;
     }
 
+    public List<String> getSubFolders(String folderPath) throws ExecutionException {
+
+        List<String> subFolders = Lists.newArrayList();
+
+        HudsonFolder folder = null;
+        folder = cacheFolders.get(configuration.getUrl() + folderPath);
+
+        for (HudsonNode node : folder.getJobs()) {
+            String nodeName = node.getName();
+            if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
+                // in case of Folder, add it to the list of folders
+                subFolders.add(nodeName);
+            }
+        }
+
+        return subFolders;
+    }
+
     //-------------------------------------------
 
     public List<HudsonJob> getJobsRecursiveModeFrom(String folderPath) throws ExecutionException {
