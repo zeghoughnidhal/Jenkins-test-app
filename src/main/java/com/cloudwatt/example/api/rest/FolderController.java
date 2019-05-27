@@ -10,11 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -248,6 +246,55 @@ public class FolderController extends AbstractRestHandler {
         String buildPath = getJenkinsFolderPath(extractedPath.toArray(new String[0])) + "/" + pathList.get(pathList.size() - 1);
 
         return folderService.getBuildTestsReportFromUrl(buildPath);
+    }
+
+
+
+
+
+    // SubFolders
+
+    @RequestMapping(value = "/subfolders", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<String> getSubFolderRoot() throws ExecutionException {
+        return this.folderService.getSubFolders("");
+    }
+
+
+    @RequestMapping(value = "/subfolders/{projectName}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<String> getSubFolderLevel1(
+            @PathVariable("projectName") String projectName,
+            @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) throws ExecutionException {
+
+        return this.folderService.getSubFolders(getJenkinsFolderPath(projectName));
+    }
+
+    @RequestMapping(value = "/subfolders/{projectName}/{projectName2}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<String> getSubFolderLevel2(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2) throws ExecutionException {
+        return this.folderService.getSubFolders(getJenkinsFolderPath(projectName, projectName2));
+    }
+
+
+    @RequestMapping(value = "/subfolders/{projectName}/{projectName2}/{projectName3}", method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    public @ResponseBody
+    List<String> getSubFolderLevel3(
+            @PathVariable("projectName") String projectName,
+            @PathVariable("projectName2") String projectName2,
+            @PathVariable("projectName3") String projectName3) throws ExecutionException {
+
+        return this.folderService.getSubFolders(getJenkinsFolderPath(projectName, projectName2, projectName3));
     }
 
 
