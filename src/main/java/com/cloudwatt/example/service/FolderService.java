@@ -357,8 +357,6 @@ public class FolderService {
         return forView;
     }
 
-
-
     //-------------------------------------------
 
     private void mappingJob(HudsonJob job, String folderName, String nodeName) {
@@ -471,3 +469,4 @@ public class FolderService {
 
     //-------------------------------------------
 }
+
