@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping(value = "/api")
-@Api(tags = {"HudsonFolder"})
+@Api()
 public class FolderController extends AbstractRestHandler {
 
     @Autowired
@@ -307,7 +308,7 @@ public class FolderController extends AbstractRestHandler {
         for (String folder : folders) {
             path += "/job/" + folder;
         }
-        return path;
+        return path + "/";
     }
 
 
