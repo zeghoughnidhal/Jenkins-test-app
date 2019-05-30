@@ -400,7 +400,7 @@ public class FolderService {
     protected String extractLastLine(String allLines) {
         String[] lines = allLines.split("\n");
         for (int i = lines.length - 1; i >= 0; i--) {
-            if (!lines[i].trim().equals("")) {
+            if (!lines[i].trim().equals("") && !lines[i].trim().equals("null")) {
                 return lines[i].trim();
             }
         }
@@ -414,18 +414,8 @@ public class FolderService {
         if (className.length() == 0) {
             detailUrl.append("(root)/(empty)");
         } else {
-            String[] pathTab = className.split("\\.");
-            for (int i = 0; i <= pathTab.length - 1; i++) {
-                if (i == pathTab.length - 1) {
-                    detailUrl.append(pathTab[i]);
-                    continue;
-                }
-                if (i == pathTab.length - 2) {
-                    detailUrl.append(pathTab[i]).append("/");
-                } else {
-                    detailUrl.append(pathTab[i]).append(".");
-                }
-            }
+            detailUrl.append(className);
+            detailUrl.setCharAt(className.lastIndexOf("."), '/');
         }
 
         String modifiedName = name
@@ -451,7 +441,31 @@ public class FolderService {
         String buildTestsReportUrl = configuration.getUrl() + "/" + buildPath + "/testReport/";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(buildTestsReportUrl + "/api/json");
-        JsonNode testResults = restTemplate.getForObject(builder.build().toString(), JsonNode.class);
+
+        JsonNode testResults;
+        try {
+            testResults = restTemplate.getForObject(builder.build().toString(), JsonNode.class);
+        } catch (HttpClientErrorException e) {
+            // No Test Results
+
+            logger.info("HTTP Code : " + e.getStatusCode());
+            logger.info("Could not found : " + builder.build().toString());
+
+            // try another url
+            String buildTestsConsoleUrl = configuration.getUrl() + "/" + buildPath + "/console";
+            UriComponentsBuilder builderConsole = UriComponentsBuilder.fromHttpUrl(buildTestsConsoleUrl);
+            String consoleOutput;
+            try {
+                consoleOutput = restTemplate.getForObject(builderConsole.build().toString(), String.class);
+                logger.info(consoleOutput);
+            } catch (HttpClientErrorException e1) {
+                logger.info("HTTP Code : " + e1.getStatusCode());
+                logger.info("Could not found : " + builderConsole.build().toString());
+                return testOnErrorsList;
+            }
+
+            return testOnErrorsList;
+        }
 
         for (JsonNode suite : testResults.get("suites")) {
 
@@ -459,14 +473,15 @@ public class FolderService {
 
                 ObjectNode subCaseAsObjectNode = (ObjectNode) subcase;
 
-                if (!subcase.get("status").asText().equals("PASSED")) {
+                if (!subcase.get("status").asText().equals("PASSED") &&
+                        !subcase.get("status").asText().equals("FIXED")) {
                     String detailOnErrorUrl = buildTestsReportUrl + generateReportTestDetailUri(subcase.get("className").asText(), subcase.get("name").asText());
                     ObjectNode detailOnError;
                     try {
                         detailOnError = restTemplate.getForObject(detailOnErrorUrl + "/api/json", ObjectNode.class);
                     } catch (HttpClientErrorException e) {
-                        logger.warning("HTTP Code : " + e.getStatusCode());
-                        logger.warning("Could not found : " + detailOnErrorUrl);
+                        logger.info("HTTP Code : " + e.getStatusCode());
+                        logger.info("Could not found : " + detailOnErrorUrl);
                         continue;
                     }
 
