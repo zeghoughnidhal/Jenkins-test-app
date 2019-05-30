@@ -17,6 +17,7 @@ import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -399,7 +400,7 @@ public class FolderService {
     protected String extractLastLine(String allLines) {
         String[] lines = allLines.split("\n");
         for (int i = lines.length - 1; i >= 0; i--) {
-            if (!lines[i].trim().equals("")) {
+            if (!lines[i].trim().equals("") && !lines[i].trim().equals("null")) {
                 return lines[i].trim();
             }
         }
@@ -410,17 +411,11 @@ public class FolderService {
 
         StringBuilder detailUrl = new StringBuilder();
 
-        String[] pathTab = className.split("\\.");
-        for (int i = 0; i <= pathTab.length - 1; i++) {
-            if (i == pathTab.length - 1) {
-                detailUrl.append(pathTab[i]);
-                continue;
-            }
-            if (i == pathTab.length - 2) {
-                detailUrl.append(pathTab[i]).append("/");
-            } else {
-                detailUrl.append(pathTab[i]).append(".");
-            }
+        if (className.length() == 0) {
+            detailUrl.append("(root)/(empty)");
+        } else {
+            detailUrl.append(className);
+            detailUrl.setCharAt(className.lastIndexOf("."), '/');
         }
 
         String modifiedName = name
@@ -439,14 +434,38 @@ public class FolderService {
     }
 
     //-------------------------------------------
-    public ArrayList<ObjectNode> getBuildTestsReportFromUrl(String buildPath) throws ExecutionException {
+    public ArrayList<ObjectNode> getBuildTestsReportFromUrl(String buildPath) {
 
         ArrayList<ObjectNode> testOnErrorsList = Lists.newArrayList();
 
         String buildTestsReportUrl = configuration.getUrl() + "/" + buildPath + "/testReport/";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(buildTestsReportUrl + "/api/json");
-        JsonNode testResults = restTemplate.getForObject(builder.build().toString(), JsonNode.class);
+
+        JsonNode testResults;
+        try {
+            testResults = restTemplate.getForObject(builder.build().toString(), JsonNode.class);
+        } catch (HttpClientErrorException e) {
+            // No Test Results
+
+            logger.info("HTTP Code : " + e.getStatusCode());
+            logger.info("Could not found : " + builder.build().toString());
+
+            // try another url
+            String buildTestsConsoleUrl = configuration.getUrl() + "/" + buildPath + "/console";
+            UriComponentsBuilder builderConsole = UriComponentsBuilder.fromHttpUrl(buildTestsConsoleUrl);
+            String consoleOutput;
+            try {
+                consoleOutput = restTemplate.getForObject(builderConsole.build().toString(), String.class);
+                logger.info(consoleOutput);
+            } catch (HttpClientErrorException e1) {
+                logger.info("HTTP Code : " + e1.getStatusCode());
+                logger.info("Could not found : " + builderConsole.build().toString());
+                return testOnErrorsList;
+            }
+
+            return testOnErrorsList;
+        }
 
         for (JsonNode suite : testResults.get("suites")) {
 
@@ -454,9 +473,18 @@ public class FolderService {
 
                 ObjectNode subCaseAsObjectNode = (ObjectNode) subcase;
 
-                if (!subcase.get("status").asText().equals("PASSED")) {
+                if (!subcase.get("status").asText().equals("PASSED") &&
+                        !subcase.get("status").asText().equals("FIXED")) {
                     String detailOnErrorUrl = buildTestsReportUrl + generateReportTestDetailUri(subcase.get("className").asText(), subcase.get("name").asText());
-                    ObjectNode detailOnError = restTemplate.getForObject(detailOnErrorUrl + "/api/json", ObjectNode.class);
+                    ObjectNode detailOnError;
+                    try {
+                        detailOnError = restTemplate.getForObject(detailOnErrorUrl + "/api/json", ObjectNode.class);
+                    } catch (HttpClientErrorException e) {
+                        logger.info("HTTP Code : " + e.getStatusCode());
+                        logger.info("Could not found : " + detailOnErrorUrl);
+                        continue;
+                    }
+
                     String errorStackTrace = extractLastLine(detailOnError.get("errorStackTrace").asText());
                     subCaseAsObjectNode.put("errorStackTrace", errorStackTrace);
                     testOnErrorsList.add(subCaseAsObjectNode);
