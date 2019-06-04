@@ -79,7 +79,7 @@ public class ApplicationConfiguration {
         return restTemplate;
     }
 
-    public String getUrl() {
+    public String getJenkinsBaseUrl() {
         return url;
     }
 

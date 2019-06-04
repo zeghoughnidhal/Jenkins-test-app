@@ -1,6 +1,5 @@
 package com.cloudwatt.example.api.rest;
 
-import com.cloudwatt.example.domain.jenkins.HudsonFolder;
 import com.cloudwatt.example.service.JenkinsService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Splitter;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -23,39 +23,55 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping(value = "/api")
 @Api()
-public class FolderController extends AbstractController {
+public class MetricsController extends AbstractController {
 
     @Autowired
     private JenkinsService folderService;
 
+
     /*-------------------------------------------------------------------------------------*/
-    // /folders
+    // /forView/metrics
     /*-------------------------------------------------------------------------------------*/
 
-    @RequestMapping(value = "/folders/**", method = RequestMethod.GET, produces = {"application/json"})
+    @RequestMapping(value = "/metrics/**", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a folder from its path", notes = "")
+    @ApiOperation(value = "Get jobs (with environments list).", notes = "")
     public @ResponseBody
-    HudsonFolder getFolder(
+    Map<String, Object> getMetrics(
             HttpServletRequest request,
-            @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) throws ExecutionException {
+            @RequestParam(value = "recursive", defaultValue = "false") boolean recursiveMode) throws ExecutionException {
+
         String folderPath = getJenkinsPathFromRequest(request, 3);
-        return this.folderService.getFolder(folderPath, depth);
+
+
+        if (recursiveMode) {
+            return this.folderService.getJobsForMetricsRecursiveMode(folderPath);
+        }
+
+        return this.folderService.getJobsForMetrics(folderPath);
     }
 
 
     /*-------------------------------------------------------------------------------------*/
-    // Sub-Folders
+    // /results   (suite test results)
     /*-------------------------------------------------------------------------------------*/
 
-    @RequestMapping(value = "/subfolders/**", method = RequestMethod.GET, produces = {"application/json"})
+    @RequestMapping(value = "/results/**", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get a paginated list of all hotels.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
     public @ResponseBody
-    List<String> getSubFolder(HttpServletRequest request) throws ExecutionException {
-        String folderPath = getJenkinsPathFromRequest(request, 3);
-        return this.folderService.getSubFolders(folderPath);
-    }
+    ObjectNode getTestResult(
+            HttpServletRequest request) throws ExecutionException {
 
+        List<String> pathElements = extractPathElementsFromUrlFromIndex(request, 3);
+
+        // build is the last part of the request url
+        String buildId = pathElements.get(pathElements.size() - 1);
+        // remove buildId from path
+        pathElements.remove(pathElements.size() - 1);
+        String folderPath = getJenkinsFolderPath(pathElements) + buildId;
+
+        return folderService.getBuildTestsReportFromUrl(folderPath);
+    }
 
 }

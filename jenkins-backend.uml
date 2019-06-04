@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.cloudwatt.example</OriginalElement>
+  <nodes>
+    <node x="1343.5" y="395.0">com.cloudwatt.example.api.rest.FolderController</node>
+    <node x="9.25" y="1460.0">com.cloudwatt.example.Application</node>
+    <node x="19.5" y="429.0">com.cloudwatt.example.domain.jenkins.HudsonNode</node>
+    <node x="254.5" y="506.5">com.cloudwatt.example.domain.jenkins.HudsonFolder</node>
+    <node x="865.5" y="253.0">com.cloudwatt.example.api.rest.AbstractController</node>
+    <node x="926.5" y="406.0">com.cloudwatt.example.api.rest.JobController</node>
+    <node x="107.75" y="0.0">com.cloudwatt.example.domain.jenkins.HudsonCore</node>
+    <node x="926.0" y="993.75">com.cloudwatt.example.client.JenkinsClient</node>
+    <node x="866.25" y="538.75">com.cloudwatt.example.service.JenkinsService</node>
+    <node x="901.0" y="1497.25">com.cloudwatt.example.domain.RestErrorInfo</node>
+    <node x="0.0" y="682.0">com.cloudwatt.example.domain.jenkins.HudsonJob</node>
+    <node x="1153.75" y="1494.75">com.cloudwatt.example.api.rest.docs.SwaggerConfig</node>
+    <node x="459.75" y="1428.75">com.cloudwatt.example.ApplicationConfiguration</node>
+    <node x="741.5" y="0.0">com.cloudwatt.example.api.rest.AbstractRestHandler</node>
+    <node x="477.5" y="395.0">com.cloudwatt.example.api.rest.MetricsController</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.cloudwatt.example.api.rest.AbstractController" target="com.cloudwatt.example.api.rest.AbstractRestHandler">
+      <point x="0.0" y="-46.0" />
+      <point x="0.0" y="101.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonFolder" target="com.cloudwatt.example.domain.jenkins.HudsonCore">
+      <point x="0.0" y="-24.0" />
+      <point x="343.5" y="404.0" />
+      <point x="299.0" y="404.0" />
+      <point x="63.75" y="189.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.FolderController" target="com.cloudwatt.example.api.rest.AbstractController">
+      <point x="0.0" y="-46.5" />
+      <point x="1531.5" y="370.0" />
+      <point x="1298.0" y="370.0" />
+      <point x="173.0" y="46.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.MetricsController" target="com.cloudwatt.example.api.rest.AbstractController">
+      <point x="0.0" y="-46.5" />
+      <point x="692.0" y="370.0" />
+      <point x="952.0" y="370.0" />
+      <point x="-173.0" y="46.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonNode" target="com.cloudwatt.example.domain.jenkins.HudsonCore">
+      <point x="0.0" y="-101.5" />
+      <point x="127.0" y="404.0" />
+      <point x="171.5" y="404.0" />
+      <point x="-63.75" y="189.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonJob" target="com.cloudwatt.example.domain.jenkins.HudsonNode">
+      <point x="0.0" y="-266.5" />
+      <point x="0.0" y="101.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.JobController" target="com.cloudwatt.example.api.rest.AbstractController">
+      <point x="0.0" y="-35.5" />
+      <point x="0.0" y="46.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8" x="861.75" y="466.875" />
+  <SelectedNodes>
+    <node>com.cloudwatt.example.client.JenkinsClient</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
