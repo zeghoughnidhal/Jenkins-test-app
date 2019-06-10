@@ -19,10 +19,6 @@ public class HudsonNode extends HudsonCore {
         this.env = env;
     }
 
-    public String getFolderName() {
-        return folderName;
-    }
-
     public void setFolderName(String folderName) {
         this.folderName = folderName;
     }

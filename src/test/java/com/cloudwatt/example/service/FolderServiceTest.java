@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class FolderServiceTest {
 
     @Autowired
-    private FolderService folderService;
+    private JenkinsService folderService;
 
     @Test
     public void testNull() {
