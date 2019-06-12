@@ -1,6 +1,8 @@
 package com.cloudwatt.example.api.rest;
 
 import com.cloudwatt.example.domain.jenkins.HudsonFolder;
+import com.cloudwatt.example.respository.FolderRepository;
+import com.cloudwatt.example.respository.SubFolderRepository;
 import com.cloudwatt.example.service.JenkinsService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Splitter;
@@ -27,6 +29,12 @@ public class FolderController extends AbstractController {
 
     @Autowired
     private JenkinsService folderService;
+
+    @Autowired
+    private FolderRepository folderRepository;
+
+    @Autowired
+    private SubFolderRepository subFolderRepository;
 
     /*-------------------------------------------------------------------------------------*/
     // /folders
