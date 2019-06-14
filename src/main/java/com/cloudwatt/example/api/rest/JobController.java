@@ -1,8 +1,6 @@
 package com.cloudwatt.example.api.rest;
 
 import com.cloudwatt.example.domain.jenkins.HudsonJob;
-import com.cloudwatt.example.respository.BuildRepository;
-import com.cloudwatt.example.respository.JobRepository;
 import com.cloudwatt.example.service.JenkinsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,11 +24,11 @@ public class JobController extends AbstractController {
     @Autowired
     private JenkinsService folderService;
 
-    @Autowired
-    private JobRepository jobRepository;
+    //@Autowired
+    //private JobRepository jobRepository;
 
-    @Autowired
-    private BuildRepository buildRepository;
+  //  @Autowired
+   // private BuildRepository buildRepository;
 
     /*-------------------------------------------------------------------------------------*/
     // /jobs
