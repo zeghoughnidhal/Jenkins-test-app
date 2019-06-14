@@ -3,10 +3,7 @@ package com.cloudwatt.example.dao;
 import com.cloudwatt.example.domain.jenkins.HudsonFolder;
 import com.cloudwatt.example.domain.jenkins.HudsonJob;
 import com.cloudwatt.example.entity.BuildEntity;
-import com.cloudwatt.example.entity.FolderEntity;
 import com.cloudwatt.example.entity.JobEntity;
-import com.cloudwatt.example.respository.BuildRepository;
-import com.cloudwatt.example.respository.FolderRepository;
 import com.cloudwatt.example.respository.JobRepository;
 import java.util.List;
 import java.util.Map;
@@ -19,48 +16,28 @@ import org.springframework.stereotype.Repository;
 public class JenkinsDao {
 
   @Autowired
-  @Deprecated
-  private FolderRepository folderRepository;
-
-  @Autowired
   private JobRepository jobRepository;
-
-  @Autowired
-  @Deprecated
-  private BuildRepository buildRepository;
-
-  @Transactional
-  @Deprecated
-  public void saveFolder(HudsonFolder result) {
-    folderRepository.save(mapFolder(result));
-  }
-
-  @Transactional
-  @Deprecated
-  public void saveBuild(Map<String, String> build) {
-    buildRepository.save(mapBuild(build));
-  }
 
   @Transactional
   public void saveJobs(List<HudsonJob> jobs) {
     jobRepository.saveAll(mapJobs(jobs));
   }
 
-  @Deprecated
-  private FolderEntity mapFolder(HudsonFolder result) {
-
-    FolderEntity folderEntity = new FolderEntity();
-    folderEntity.setColor(result.getColor());
-    folderEntity.setDescription(result.getDescription());
-    folderEntity.setDisplayName(result.getDisplayName());
-    folderEntity.setFullName(result.getFullName());
-    folderEntity.setFullDisplayName(result.getFullDisplayName());
-    folderEntity.setName(result.getName());
-    folderEntity.setUrl(result.getUrl());
-
-//    folderEntity.setJobs(mapJobs(result.getJobs()));
-    return folderEntity;
-  }
+//  @Deprecated
+//  private FolderEntity mapFolder(HudsonFolder result) {
+//
+//    FolderEntity folderEntity = new FolderEntity();
+//    folderEntity.setColor(result.getColor());
+//    folderEntity.setDescription(result.getDescription());
+//    folderEntity.setDisplayName(result.getDisplayName());
+//    folderEntity.setFullName(result.getFullName());
+//    folderEntity.setFullDisplayName(result.getFullDisplayName());
+//    folderEntity.setName(result.getName());
+//    folderEntity.setUrl(result.getUrl());
+//
+////    folderEntity.setJobs(mapJobs(result.getJobs()));
+//    return folderEntity;
+//  }
 
   private List<JobEntity> mapJobs(List<HudsonJob> jobs) {
 

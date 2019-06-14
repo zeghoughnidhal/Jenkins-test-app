@@ -2,6 +2,7 @@ package com.cloudwatt.example.service;
 
 import com.cloudwatt.example.ApplicationConfiguration;
 import com.cloudwatt.example.client.JenkinsClient;
+import com.cloudwatt.example.dao.JenkinsDao;
 import com.cloudwatt.example.domain.jenkins.HudsonFolder;
 import com.cloudwatt.example.domain.jenkins.HudsonJob;
 import com.cloudwatt.example.domain.jenkins.HudsonNode;
@@ -35,6 +36,9 @@ public class JenkinsService {
 
     @Autowired
     private JenkinsClient jenkinsClient;
+
+    @Autowired
+    private JenkinsDao jenkinsDao;
 
     private Logger logger = Logger.getLogger("");
 
@@ -112,6 +116,8 @@ public class JenkinsService {
             }
         }
 
+        jenkinsDao.saveJobs(jobs);
+
         return jobs;
     }
 
@@ -143,6 +149,8 @@ public class JenkinsService {
                 }
             }
         }
+
+        jenkinsDao.saveJobs(foundedJobs);
 
         return foundedJobs;
     }
