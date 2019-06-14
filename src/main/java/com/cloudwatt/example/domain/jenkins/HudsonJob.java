@@ -62,8 +62,98 @@ public class HudsonJob extends HudsonNode implements Serializable, Comparable {
 
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Boolean getBuildable() {
+        return buildable;
+    }
+
+    public List<Object> getBuilds() {
+        return builds;
+    }
+
+    public Object getFirstBuild() {
+        return firstBuild;
+    }
+
+    public List<Object> getHealthReport() {
+        return healthReport;
+    }
+
+    public Boolean getInQueue() {
+        return inQueue;
+    }
+
+    public Boolean getKeepDependencies() {
+        return keepDependencies;
+    }
+
+    public Object getLastBuild() {
+        return lastBuild;
+    }
+
+    public Object getLastCompletedBuild() {
+        return lastCompletedBuild;
+    }
+
+    public Object getLastFailedBuild() {
+        return lastFailedBuild;
+    }
+
+    public Object getLastStableBuild() {
+        return lastStableBuild;
+    }
+
+    public Object getLastSuccessfulBuild() {
+        return lastSuccessfulBuild;
+    }
+
+    public Object getLastUnstableBuild() {
+        return lastUnstableBuild;
+    }
+
+    public Object getLastUnsuccessfulBuild() {
+        return lastUnsuccessfulBuild;
+    }
+
+    public Integer getNextBuildNumber() {
+        return nextBuildNumber;
+    }
+
+    public List<Object> getProperty() {
+        return property;
+    }
+
+    public Object getQueueItem() {
+        return queueItem;
+    }
+
+    public Boolean getConcurrentBuild() {
+        return concurrentBuild;
+    }
+
+    public List<Object> getDownstreamProjects() {
+        return downstreamProjects;
+    }
+
+    public String getLabelExpression() {
+        return labelExpression;
+    }
+
+    public Object getScm() {
+        return scm;
+    }
+
+    public List<Object> getUpstreamProjects() {
+        return upstreamProjects;
+    }
+
     @Override
     public int compareTo(Object o) {
         return this.getViewName().compareTo(((HudsonJob) o).getViewName());
     }
+
+
 }

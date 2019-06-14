@@ -22,7 +22,7 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 
 @Configuration()
-@ConfigurationProperties(prefix = "specific")
+//@ConfigurationProperties(prefix = "specific")
 @PropertySource("classpath:application.yml")
 public class ApplicationConfiguration {
 
@@ -79,6 +79,7 @@ public class ApplicationConfiguration {
         return restTemplate;
     }
 
+    @Bean("jenkins.base.url")
     public String getJenkinsBaseUrl() {
         return url;
     }

@@ -3,34 +3,29 @@ package com.cloudwatt.example.service;
 import com.cloudwatt.example.ApplicationConfiguration;
 import com.cloudwatt.example.client.JenkinsClient;
 import com.cloudwatt.example.domain.jenkins.HudsonFolder;
-import com.cloudwatt.example.domain.jenkins.HudsonNode;
 import com.cloudwatt.example.domain.jenkins.HudsonJob;
+import com.cloudwatt.example.domain.jenkins.HudsonNode;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.h2.util.StringUtils;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @Service
 public class JenkinsService {
@@ -166,7 +161,7 @@ public class JenkinsService {
             HudsonFolder folder = jenkinsClient.cacheFolders.get(fullUrl);
 
             for (HudsonNode node : folder.getJobs()) {
-                String nodeUrl = StringUtils.urlDecode(node.getUrl());
+                String nodeUrl = URLDecoder.decode(node.getUrl());
                 if (!node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
                     // get full data of the job
                     HudsonJob job = jenkinsClient.cacheJobs.get(nodeUrl);
@@ -229,7 +224,7 @@ public class JenkinsService {
             HudsonFolder folder = jenkinsClient.cacheFolders.get(fullUrl);
 
             for (HudsonNode node : folder.getJobs()) {
-                String nodeUrl = StringUtils.urlDecode(node.getUrl());
+                String nodeUrl = URLDecoder.decode(node.getUrl());
                 if (node.get_class().equals("com.cloudbees.hudson.plugins.folder.Folder")) {
                     // in case of Folder, call the method again to scan it
                     Map<String, Object> subfolderMatrixView = getJobsForMetricsRecursiveModeFromUrl(nodeUrl);

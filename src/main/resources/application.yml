@@ -1,25 +1,64 @@
-# Spring Boot configuration
----
+
 spring:
   jmx:
     enabled: false
----
-server:
-  port: 8090
-#todo: make sure to always enable security in production
+
+  datasource:
+    url: jdbc:h2:mem:bootexample;MODE=MySQL
+    driverClassName: org.h2.Driver
+    username: jenkins
+    password: jenkins
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/jenkins
+#    username: postgres
+#    password: pwd
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  profiles: test
+
+  h2:
+    console:
+      enabled: true
+    path: /h2-console
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+javax:
+  persistence:
+    schema-generation:
+      database:
+        action: drop-and-create
+
+
 security:
   basic:
     enabled: false
+
 #management endpoints on a separate port
 management:
-  port: 8095
+  port: 8091
   security:
     enabled: false # management port is internal only. no need to secure it.
+
 #default project info followed by actual injected pom-specified values.
 project:
-  name: spring-boot-rest-example
-  version: 0.1
-  description: boot-example default description
+  name: jenkins-back
+  version: 0.0.1
+  description: jenkins back
+
 info:
   build:
     artifact: ${project.artifactId}
@@ -27,25 +66,17 @@ info:
     description: ${project.description}
     version: ${project.version}
 
-hotel.service:
-  name: 'default profile:'
-
----
-spring:
-  profiles: test
-  h2:
-    console:
-      enabled: true
-
-spring.jpa:
-  hibernate.ddl-auto: create-drop
-
-hotel.service:
-  name: 'test profile:'
-
 logging:
-  file: boot_example.log
-  org.hibernate: INFO
+  level:
+    org:
+      hibernate:
+        SQL:
+          TRACE
+        type:
+          descriptor:
+            sql:
+              BasicBinder:
+                TRACE
 
 specific:
   jenkins_user: izeghouh

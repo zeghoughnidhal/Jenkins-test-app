@@ -1,55 +1,53 @@
 package com.cloudwatt.example.entity;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Collection;
+import static javax.persistence.CascadeType.ALL;
+
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "JOB")
-public class JobEntity implements Serializable {
+public class JobEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
+    private Long id;
 
+    @OneToMany(cascade = ALL, mappedBy = "job")
+    private List<BuildEntity> builds;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity firstBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastCompletedBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastFailedBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastStableBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastSuccessfulBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastUnstableBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastUnsuccessfulBuild;
 
     private Integer nextBuildNumber;
-
-    private FolderEntity folderJob;
-
-    @OneToMany(mappedBy = "buildJob")
-    private Collection<BuildEntity> builds;
-
-    public JobEntity() {
-    }
-
-    public JobEntity(Integer nextBuildNumber) {
-        this.nextBuildNumber = nextBuildNumber;
-    }
 
     public Long getId() {
         return id;
@@ -59,11 +57,11 @@ public class JobEntity implements Serializable {
         this.id = id;
     }
 
-    public Collection<BuildEntity> getBuilds() {
+    public List<BuildEntity> getBuilds() {
         return builds;
     }
 
-    public void setBuilds(Collection<BuildEntity> builds) {
+    public void setBuilds(List<BuildEntity> builds) {
         this.builds = builds;
     }
 
@@ -137,15 +135,5 @@ public class JobEntity implements Serializable {
 
     public void setNextBuildNumber(Integer nextBuildNumber) {
         this.nextBuildNumber = nextBuildNumber;
-
     }
-
-    public FolderEntity getFolderJob() {
-        return folderJob;
-    }
-
-    public void setFolderJob(FolderEntity folderJob) {
-        this.folderJob = folderJob;
-    }
-
 }

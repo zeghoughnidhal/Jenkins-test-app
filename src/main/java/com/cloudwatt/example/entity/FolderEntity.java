@@ -1,11 +1,16 @@
 package com.cloudwatt.example.entity;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="FOLDER")
+@Table(name = "FOLDER")
 public class FolderEntity implements Serializable {
 
     @Id
@@ -30,12 +35,11 @@ public class FolderEntity implements Serializable {
 
     private String folderName;
 
-   @OneToMany(mappedBy="subFolder")
+    @OneToMany
     private Collection<FolderEntity> folders;
 
-    @OneToMany(mappedBy="folderJob")
+    @OneToMany
     private Collection<JobEntity> jobs;
-
 
     private FolderEntity subFolder;
 
