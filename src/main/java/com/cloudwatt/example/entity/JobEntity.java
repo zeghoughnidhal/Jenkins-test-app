@@ -2,7 +2,12 @@ package com.cloudwatt.example.entity;
 
 import static javax.persistence.CascadeType.ALL;
 
+import com.cloudwatt.example.dao.JenkinsDao;
+import com.cloudwatt.example.domain.jenkins.HudsonJob;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -135,5 +140,40 @@ public class JobEntity {
 
     public void setNextBuildNumber(Integer nextBuildNumber) {
         this.nextBuildNumber = nextBuildNumber;
+    }
+
+    public static JobEntity build(HudsonJob e) {
+
+        JobEntity entity = new JobEntity();
+
+        entity.setBuilds(mapBuilds(entity, e.getBuilds()));
+
+        entity.setFirstBuild(mapBuild(entity, e.getFirstBuild()));
+        entity.setLastBuild(mapBuild(entity, e.getLastBuild()));
+        entity.setLastCompletedBuild(mapBuild(entity, e.getLastCompletedBuild()));
+        entity.setLastFailedBuild(mapBuild(entity, e.getLastFailedBuild()));
+        entity.setLastStableBuild(mapBuild(entity, e.getLastStableBuild()));
+        entity.setLastSuccessfulBuild(mapBuild(entity, e.getLastSuccessfulBuild()));
+        entity.setLastUnstableBuild(mapBuild(entity, e.getLastUnstableBuild()));
+        entity.setLastUnsuccessfulBuild(mapBuild(entity, e.getLastUnsuccessfulBuild()));
+
+        entity.setNextBuildNumber(e.getNextBuildNumber());
+
+        return entity;
+    }
+
+    private static List<BuildEntity> mapBuilds(JobEntity jobEntity, List<Object> build) {
+        return build.stream().map(bl -> mapBuild(jobEntity, bl)).collect(Collectors.toList());
+    }
+
+    private static BuildEntity mapBuild(JobEntity entity, Object build) {
+
+        if (build != null) {
+            BuildEntity buildEntity = BuildEntity.build((Map<String, Object>) build);
+            buildEntity.setJob(entity);
+            return buildEntity;
+        }
+
+        return null;
     }
 }

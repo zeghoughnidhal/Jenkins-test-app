@@ -1,5 +1,6 @@
 package com.cloudwatt.example.entity;
 
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -65,7 +66,15 @@ public class BuildEntity {
         return job;
     }
 
-    public void setJob(JobEntity job) {
+    public BuildEntity setJob(JobEntity job) {
         this.job = job;
+        return this;
+    }
+
+    public static BuildEntity build(Map<String, Object> values) {
+        BuildEntity buildEntity = new BuildEntity();
+        buildEntity.setBuildId((String) values.get(("id")));
+        buildEntity.setFullDisplayName(values.get("fullDisplayName") != null ? (String) values.get(("fullDisplayName")) : null);
+        return buildEntity;
     }
 }
