@@ -1,35 +1,27 @@
 # Spring Boot configuration
 ---
 spring:
-  jmx:
-    enabled: false
+#  # Database
+#  datasource:
+#    url: "jdbc:postgresql://localhost:5432/jenkins"
+#    username: postgres
+#    password: pwd
+#  # JPA properties
+#  jpa:
+#    properties:
+#      hibernate:
+#        ddl-auto: update
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        temp:
+#          use_jdbc_metadata_defaults: false
+
+  security:
+    user:
+      name: admin
+      password: admin
 ---
 server:
   port: 8090
-#todo: make sure to always enable security in production
-security:
-  basic:
-    enabled: false
-#management endpoints on a separate port
-management:
-  port: 8095
-  security:
-    enabled: false # management port is internal only. no need to secure it.
-#default project info followed by actual injected pom-specified values.
-project:
-  name: spring-boot-rest-example
-  version: 0.1
-  description: boot-example default description
-info:
-  build:
-    artifact: ${project.artifactId}
-    name: ${project.name}
-    description: ${project.description}
-    version: ${project.version}
-
-hotel.service:
-  name: 'default profile:'
-
 ---
 spring:
   profiles: test

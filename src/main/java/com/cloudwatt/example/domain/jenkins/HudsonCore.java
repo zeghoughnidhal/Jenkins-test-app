@@ -16,6 +16,35 @@ public class HudsonCore {
     private String displayName;
     @JsonProperty("displayNameOrNull")
     private Object displayNameOrNull;
+
+    public List<Object> getActions() {
+        return actions;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public Object getDisplayNameOrNull() {
+        return displayNameOrNull;
+    }
+
+    public String getFullDisplayName() {
+        return fullDisplayName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
     @JsonProperty("fullDisplayName")
     private String fullDisplayName;
     @JsonProperty("fullName")

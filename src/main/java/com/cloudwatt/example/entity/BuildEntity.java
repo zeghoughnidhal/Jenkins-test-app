@@ -1,41 +1,34 @@
 package com.cloudwatt.example.entity;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Clob;
+import java.util.Map;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "BUILD")
-public class BuildEntity implements Serializable {
+public class BuildEntity {
 
-     @Id
-     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String buildId;
 
-    private  JobEntity buildJob;
+    private String fullDisplayName;
 
-    public JobEntity getBuildJob() {
-        return buildJob;
-    }
+    // A voir le format du message de build
+    private String detail;
 
-    public void setBuildJob(JobEntity buildJob) {
-        this.buildJob = buildJob;
-    }
-
-    public BuildEntity() {
-    }
-
-    public BuildEntity(String buildId, Clob detail) {
-        this.buildId = buildId;
-        this.detail = detail;
-    }
-
-
-    // A voir le format du message de build ? Blob ?
-    private Clob detail;
-
+    @ManyToOne
+    @JoinColumn(name = "job", referencedColumnName = "id")
+    private JobEntity job;
 
     public Long getId() {
         return id;
@@ -53,11 +46,35 @@ public class BuildEntity implements Serializable {
         this.buildId = buildId;
     }
 
-    public Clob getDetail() {
+    public String getDetail() {
         return detail;
     }
 
-    public void setDetail(Clob detail) {
+    public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public String getFullDisplayName() {
+        return fullDisplayName;
+    }
+
+    public void setFullDisplayName(String fullDisplayName) {
+        this.fullDisplayName = fullDisplayName;
+    }
+
+    public JobEntity getJob() {
+        return job;
+    }
+
+    public BuildEntity setJob(JobEntity job) {
+        this.job = job;
+        return this;
+    }
+
+    public static BuildEntity build(Map<String, Object> values) {
+        BuildEntity buildEntity = new BuildEntity();
+        buildEntity.setBuildId((String) values.get(("id")));
+        buildEntity.setFullDisplayName(values.get("fullDisplayName") != null ? (String) values.get(("fullDisplayName")) : null);
+        return buildEntity;
     }
 }

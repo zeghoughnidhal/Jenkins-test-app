@@ -1,55 +1,58 @@
 package com.cloudwatt.example.entity;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Collection;
+import static javax.persistence.CascadeType.ALL;
+
+import com.cloudwatt.example.dao.JenkinsDao;
+import com.cloudwatt.example.domain.jenkins.HudsonJob;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "JOB")
-public class JobEntity implements Serializable {
+public class JobEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
+    private Long id;
 
+    @OneToMany(cascade = ALL, mappedBy = "job")
+    private List<BuildEntity> builds;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity firstBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastCompletedBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastFailedBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastStableBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastSuccessfulBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastUnstableBuild;
 
-    @OneToOne
+    @OneToOne(cascade = ALL, mappedBy = "job")
     private BuildEntity lastUnsuccessfulBuild;
 
     private Integer nextBuildNumber;
-
-    private FolderEntity folderJob;
-
-    @OneToMany(mappedBy = "buildJob")
-    private Collection<BuildEntity> builds;
-
-    public JobEntity() {
-    }
-
-    public JobEntity(Integer nextBuildNumber) {
-        this.nextBuildNumber = nextBuildNumber;
-    }
 
     public Long getId() {
         return id;
@@ -59,11 +62,11 @@ public class JobEntity implements Serializable {
         this.id = id;
     }
 
-    public Collection<BuildEntity> getBuilds() {
+    public List<BuildEntity> getBuilds() {
         return builds;
     }
 
-    public void setBuilds(Collection<BuildEntity> builds) {
+    public void setBuilds(List<BuildEntity> builds) {
         this.builds = builds;
     }
 
@@ -137,15 +140,40 @@ public class JobEntity implements Serializable {
 
     public void setNextBuildNumber(Integer nextBuildNumber) {
         this.nextBuildNumber = nextBuildNumber;
-
     }
 
-    public FolderEntity getFolderJob() {
-        return folderJob;
+    public static JobEntity build(HudsonJob e) {
+
+        JobEntity entity = new JobEntity();
+
+        entity.setBuilds(mapBuilds(entity, e.getBuilds()));
+
+        entity.setFirstBuild(mapBuild(entity, e.getFirstBuild()));
+        entity.setLastBuild(mapBuild(entity, e.getLastBuild()));
+        entity.setLastCompletedBuild(mapBuild(entity, e.getLastCompletedBuild()));
+        entity.setLastFailedBuild(mapBuild(entity, e.getLastFailedBuild()));
+        entity.setLastStableBuild(mapBuild(entity, e.getLastStableBuild()));
+        entity.setLastSuccessfulBuild(mapBuild(entity, e.getLastSuccessfulBuild()));
+        entity.setLastUnstableBuild(mapBuild(entity, e.getLastUnstableBuild()));
+        entity.setLastUnsuccessfulBuild(mapBuild(entity, e.getLastUnsuccessfulBuild()));
+
+        entity.setNextBuildNumber(e.getNextBuildNumber());
+
+        return entity;
     }
 
-    public void setFolderJob(FolderEntity folderJob) {
-        this.folderJob = folderJob;
+    private static List<BuildEntity> mapBuilds(JobEntity jobEntity, List<Object> build) {
+        return build.stream().map(bl -> mapBuild(jobEntity, bl)).collect(Collectors.toList());
     }
 
+    private static BuildEntity mapBuild(JobEntity entity, Object build) {
+
+        if (build != null) {
+            BuildEntity buildEntity = BuildEntity.build((Map<String, Object>) build);
+            buildEntity.setJob(entity);
+            return buildEntity;
+        }
+
+        return null;
+    }
 }

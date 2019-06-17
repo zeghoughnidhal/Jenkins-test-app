@@ -1,18 +1,29 @@
 package com.cloudwatt.example.service;
 
+import com.cloudwatt.example.dao.JenkinsDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(value = SpringRunner.class)
-@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@DataJpaTest
 public class FolderServiceTest {
 
     @Autowired
     private JenkinsService folderService;
+
+    @InjectMocks
+    private JenkinsDao jenkinsDao;
 
     @Test
     public void testNull() {
