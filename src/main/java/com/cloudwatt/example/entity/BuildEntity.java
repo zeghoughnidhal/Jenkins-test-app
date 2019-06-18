@@ -1,15 +1,7 @@
 package com.cloudwatt.example.entity;
 
 import java.util.Map;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "BUILD")
@@ -26,9 +18,34 @@ public class BuildEntity {
     // A voir le format du message de build
     private String detail;
 
-    @ManyToOne
-    @JoinColumn(name = "job", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "job_id", referencedColumnName = "id")
     private JobEntity job;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "firstBuild")
+    private JobEntity buildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastBuild")
+    private JobEntity lastBuildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastCompletedBuild")
+    private JobEntity lastCompletedBuildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastFailedBuild")
+    private JobEntity lastFailedBuildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastStableBuild")
+    private JobEntity lastStableBuildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastSuccessfulBuild")
+    private JobEntity lastSuccessfulBuildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastUnstableBuild")
+    private JobEntity lastUnstableBuildJob;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "lastUnsuccessfulBuild")
+    private JobEntity lastUnsuccessfulBuildJob;
+
 
     public Long getId() {
         return id;

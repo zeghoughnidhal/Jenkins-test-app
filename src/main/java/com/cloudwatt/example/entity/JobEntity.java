@@ -8,14 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "JOB")
@@ -25,31 +18,39 @@ public class JobEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade = ALL, mappedBy = "job")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "job")
     private List<BuildEntity> builds;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "first_build_id", referencedColumnName = "id")
     private BuildEntity firstBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_build_id", referencedColumnName = "id")
     private BuildEntity lastBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_completed_build_id", referencedColumnName = "id")
     private BuildEntity lastCompletedBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_failed_build_id", referencedColumnName = "id")
     private BuildEntity lastFailedBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_stablebuild_id", referencedColumnName = "id")
     private BuildEntity lastStableBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_successful_build_id", referencedColumnName = "id")
     private BuildEntity lastSuccessfulBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_unstable_build_id", referencedColumnName = "id")
     private BuildEntity lastUnstableBuild;
 
-    @OneToOne(cascade = ALL, mappedBy = "job")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "last_unsuccessful_build_id", referencedColumnName = "id")
     private BuildEntity lastUnsuccessfulBuild;
 
     private Integer nextBuildNumber;
