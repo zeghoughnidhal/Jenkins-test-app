@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.cloudwatt.example.api.rest.docs.SwaggerConfig</OriginalElement>
+  <nodes>
+    <node x="1643.0" y="3236.0">com.cloudwatt.example.entity.JobEntity</node>
+    <node x="164.0" y="3810.0">com.cloudwatt.example.api.rest.FolderController</node>
+    <node x="3589.9561111111107" y="2080.0">org.springframework.web.WebApplicationInitializer</node>
+    <node x="813.0666666666668" y="1124.0">java.lang.Throwable.SentinelHolder</node>
+    <node x="2206.69125" y="2080.0">org.aspectj.lang.annotation.Aspect</node>
+    <node x="2328.75" y="3164.0">com.cloudwatt.example.domain.RestErrorInfo</node>
+    <node x="197.0" y="2092.0">org.springframework.data.repository.Repository</node>
+    <node x="299.7361111111111" y="1707.0">com.cloudwatt.example.exception.DataFormatException</node>
+    <node x="352.75" y="2473.0">org.springframework.stereotype.Repository</node>
+    <node x="1331.2361111111113" y="1148.0">java.lang.Throwable.PrintStreamOrWriter</node>
+    <node x="1673.5" y="3083.0">javax.persistence.Entity</node>
+    <node x="2988.389861111111" y="2850.5">com.cloudwatt.example.Application</node>
+    <node x="1224.3166666666668" y="1578.0">java.lang.Throwable.WrappedPrintWriter</node>
+    <node x="0.0" y="514.5">com.cloudwatt.example.domain.jenkins.HudsonNode</node>
+    <node x="959.6374999999999" y="3507.0">org.springframework.web.bind.annotation.RestController</node>
+    <node x="1433.3166666666668" y="1578.0">java.lang.Throwable.WrappedPrintStream</node>
+    <node x="520.0666666666668" y="1100.0">java.lang.Exception</node>
+    <node x="622.2500000000001" y="144.5">java.io.Serializable</node>
+    <node x="501.5000000000001" y="551.0">com.cloudwatt.example.domain.jenkins.HudsonFolder</node>
+    <node x="1878.9412499999999" y="2473.0">org.springframework.context.annotation.Configuration</node>
+    <node x="3589.9561111111107" y="2460.5">org.springframework.boot.web.servlet.support.SpringBootServletInitializer</node>
+    <node x="675.7361111111111" y="1707.0">com.cloudwatt.example.exception.ResourceNotFoundException</node>
+    <node x="191.66666666666674" y="847.0">com.cloudwatt.example.domain.jenkins.HudsonJob</node>
+    <node x="2059.94125" y="2473.0">com.cloudwatt.example.RestControllerAspect</node>
+    <node x="1163.7720833333333" y="2814.0">com.cloudwatt.example.ApplicationConfiguration</node>
+    <node x="0.0" y="3221.0">com.cloudwatt.example.api.rest.AbstractRestHandler</node>
+    <node x="1108.0944444444444" y="370.0">java.lang.Throwable</node>
+    <node x="545.5" y="3423.0">org.springframework.web.bind.annotation.RequestMapping</node>
+    <node x="1009.9412499999999" y="2425.0">org.springframework.context.annotation.PropertySource</node>
+    <node x="391.0" y="3035.0">org.springframework.beans.factory.Aware</node>
+    <node x="13.75" y="2353.0">org.springframework.data.repository.CrudRepository</node>
+    <node x="1947.0" y="3308.0">com.cloudwatt.example.entity.BuildEntity</node>
+    <node x="0.0" y="2092.0">org.springframework.data.repository.NoRepositoryBean</node>
+    <node x="3543.2061111111107" y="2838.0">org.springframework.boot.web.servlet.support.SpringBootServletInitializer.WebEnvironmentPropertySourceInitializer</node>
+    <node x="348.5" y="3519.0">com.cloudwatt.example.api.rest.AbstractController</node>
+    <node x="187.9861111111112" y="0.0">com.cloudwatt.example.domain.jenkins.HudsonCore</node>
+    <node x="1436.9412499999999" y="2436.5">com.cloudwatt.example.client.JenkinsClient</node>
+    <node x="1941.75" y="3035.0">javax.persistence.Table</node>
+    <node x="771.25" y="2473.0">org.springframework.stereotype.Service</node>
+    <node x="2568.704861111111" y="2850.5">com.cloudwatt.example.api.rest.docs.SwaggerConfig</node>
+    <node x="2599.94125" y="2485.0">springfox.documentation.swagger2.annotations.EnableSwagger2</node>
+    <node x="918.7686111111109" y="1879.0">org.springframework.stereotype.Indexed</node>
+    <node x="1140.6375" y="3399.0">io.swagger.annotations.Api</node>
+    <node x="226.0" y="3116.0">org.springframework.context.ApplicationEventPublisherAware</node>
+    <node x="2874.9561111111107" y="2437.0">org.springframework.boot.autoconfigure.SpringBootApplication</node>
+    <node x="2988.7061111111107" y="2055.5">org.springframework.boot.autoconfigure.EnableAutoConfiguration</node>
+    <node x="99.25" y="2862.5">com.cloudwatt.example.respository.JobRepository</node>
+    <node x="284.75" y="2850.5">com.cloudwatt.example.dao.JenkinsDao</node>
+    <node x="491.0666666666668" y="1530.0">java.lang.RuntimeException</node>
+    <node x="2375.25" y="3035.0">javax.xml.bind.annotation.XmlRootElement</node>
+    <node x="2483.2686111111107" y="1960.0">org.springframework.context.annotation.ComponentScan</node>
+    <node x="624.0" y="3822.0">com.cloudwatt.example.api.rest.JobController</node>
+    <node x="2382.94125" y="2437.0">org.springframework.context.annotation.ComponentScan.Filter</node>
+    <node x="1567.4412499999999" y="2080.0">org.springframework.stereotype.Component</node>
+    <node x="601.75" y="2766.0">com.cloudwatt.example.service.JenkinsService</node>
+    <node x="200.0" y="551.0">java.lang.Comparable</node>
+    <node x="1102.0" y="3810.0">com.cloudwatt.example.api.rest.MetricsController</node>
+    <node x="3215.9561111111107" y="2305.0">org.springframework.data.jpa.repository.config.EnableJpaRepositories</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.cloudwatt.example.Application" target="org.springframework.data.jpa.repository.config.EnableJpaRepositories">
+      <point x="50.0" y="-27.5" />
+      <point x="3138.389861111111" y="2736.0" />
+      <point x="3392.9561111111107" y="2736.0" />
+      <point x="0.0" y="195.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.Application" target="org.springframework.context.annotation.ComponentScan">
+      <point x="-50.0" y="-27.5" />
+      <point x="3038.389861111111" y="2726.0" />
+      <point x="2784.44125" y="2726.0" />
+      <point x="2784.44125" y="2275.0" />
+      <point x="2773.8936111111107" y="2275.0" />
+      <point x="58.125" y="147.5" />
+    </edge>
+    <edge source="java.lang.Throwable" target="java.io.Serializable">
+      <point x="0.0" y="-208.5" />
+      <point x="1259.5944444444444" y="345.0" />
+      <point x="727.2500000000001" y="345.0" />
+      <point x="42.0" y="15.5" />
+    </edge>
+    <edge source="java.lang.RuntimeException" target="java.lang.Exception">
+      <point x="0.0" y="-63.5" />
+      <point x="0.0" y="63.5" />
+    </edge>
+    <edge source="org.springframework.boot.autoconfigure.SpringBootApplication" target="org.springframework.context.annotation.ComponentScan">
+      <point x="-80.0" y="-63.5" />
+      <point x="2954.9561111111107" y="2285.0" />
+      <point x="2890.1436111111107" y="2285.0" />
+      <point x="174.375" y="147.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.entity.BuildEntity" target="javax.persistence.Table">
+      <point x="83.75" y="-88.0" />
+      <point x="85.5" y="75.5" />
+    </edge>
+    <edge source="java.lang.Throwable.PrintStreamOrWriter" target="java.lang.Throwable">
+      <point x="0.0" y="-15.5" />
+      <point x="1427.7361111111113" y="827.0" />
+      <point x="1320.1944444444443" y="827.0" />
+      <point x="60.59999999999991" y="208.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonFolder" target="java.io.Serializable">
+      <point x="45.0" y="-27.5" />
+      <point x="636.5000000000001" y="345.0" />
+      <point x="643.2500000000001" y="345.0" />
+      <point x="-42.0" y="15.5" />
+    </edge>
+    <edge source="java.lang.Throwable.WrappedPrintWriter" target="java.lang.Throwable">
+      <point x="-47.25" y="-15.5" />
+      <point x="1271.5666666666668" y="827.0" />
+      <point x="1259.5944444444444" y="827.0" />
+      <point x="0.0" y="208.5" />
+    </edge>
+    <edge source="org.springframework.boot.web.servlet.support.SpringBootServletInitializer" target="org.springframework.web.WebApplicationInitializer">
+      <point x="0.0" y="-40.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.FolderController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="55.0" y="-39.5" />
+      <point x="439.0" y="3760.0" />
+      <point x="986.4708333333333" y="3760.0" />
+      <point x="-53.66666666666663" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.docs.SwaggerConfig" target="springfox.documentation.swagger2.annotations.EnableSwagger2">
+      <point x="0.0" y="-27.5" />
+      <point x="2645.704861111111" y="2746.0" />
+      <point x="2681.44125" y="2746.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.docs.SwaggerConfig" target="org.springframework.context.annotation.ComponentScan">
+      <point x="51.33333333333326" y="-27.5" />
+      <point x="2697.0381944444443" y="2746.0" />
+      <point x="2773.44125" y="2746.0" />
+      <point x="2773.44125" y="2285.0" />
+      <point x="2657.6436111111107" y="2285.0" />
+      <point x="-58.125" y="147.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.entity.BuildEntity" target="javax.persistence.Entity">
+      <point x="-83.75" y="-88.0" />
+      <point x="2030.75" y="3206.0" />
+      <point x="1795.0" y="3206.0" />
+      <point x="40.5" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.FolderController" target="io.swagger.annotations.Api">
+      <point x="165.0" y="-39.5" />
+      <point x="549.0" y="3780.0" />
+      <point x="1188.8041666666668" y="3780.0" />
+      <point x="-96.33333333333331" y="135.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonNode" target="com.cloudwatt.example.domain.jenkins.HudsonCore">
+      <point x="0.0" y="-64.0" />
+      <point x="90.0" y="345.0" />
+      <point x="246.9861111111112" y="345.0" />
+      <point x="-59.0" y="160.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonJob" target="java.lang.Comparable">
+      <point x="0.0" y="-316.5" />
+      <point x="334.66666666666674" y="827.0" />
+      <point x="293.0" y="827.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="org.springframework.stereotype.Service" target="org.springframework.stereotype.Component">
+      <point x="0.0" y="-27.5" />
+      <point x="851.75" y="2285.0" />
+      <point x="1615.7412499999998" y="2285.0" />
+      <point x="-32.200000000000045" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.service.JenkinsService" target="org.springframework.stereotype.Service">
+      <point x="0.0" y="-112.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="org.springframework.context.ApplicationEventPublisherAware" target="org.springframework.beans.factory.Aware">
+      <point x="0.0" y="-27.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.RestControllerAspect" target="org.springframework.stereotype.Component">
+      <point x="-75.75" y="-27.5" />
+      <point x="2135.69125" y="2275.0" />
+      <point x="1712.34125" y="2275.0" />
+      <point x="64.39999999999998" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.MetricsController" target="org.springframework.web.bind.annotation.RequestMapping">
+      <point x="-62.0" y="-39.5" />
+      <point x="1288.0" y="3710.0" />
+      <point x="758.8333333333334" y="3710.0" />
+      <point x="85.33333333333331" y="111.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.AbstractController" target="com.cloudwatt.example.api.rest.AbstractRestHandler">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="64.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonFolder" target="com.cloudwatt.example.domain.jenkins.HudsonCore">
+      <point x="-45.0" y="-27.5" />
+      <point x="546.5000000000001" y="345.0" />
+      <point x="364.9861111111112" y="345.0" />
+      <point x="59.0" y="160.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.Application" target="org.springframework.boot.autoconfigure.EnableAutoConfiguration">
+      <point x="16.666666666666515" y="-27.5" />
+      <point x="3105.0565277777773" y="2726.0" />
+      <point x="3205.4561111111107" y="2726.0" />
+      <point x="3205.4561111111107" y="2285.0" />
+      <point x="3245.9561111111107" y="2285.0" />
+      <point x="85.75" y="52.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.ApplicationConfiguration" target="org.springframework.context.annotation.Configuration">
+      <point x="111.5" y="-64.0" />
+      <point x="1498.2720833333333" y="2746.0" />
+      <point x="1905.774583333333" y="2746.0" />
+      <point x="-53.66666666666674" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.MetricsController" target="com.cloudwatt.example.api.rest.AbstractController">
+      <point x="-186.0" y="-39.5" />
+      <point x="1164.0" y="3720.0" />
+      <point x="496.0" y="3720.0" />
+      <point x="59.0" y="15.5" />
+    </edge>
+    <edge source="java.lang.Throwable.WrappedPrintStream" target="java.lang.Throwable">
+      <point x="48.5" y="-15.5" />
+      <point x="1578.8166666666668" y="1505.0" />
+      <point x="1540.5666666666668" y="1505.0" />
+      <point x="1540.5666666666668" y="817.0" />
+      <point x="1380.7944444444447" y="817.0" />
+      <point x="121.20000000000005" y="208.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.JobController" target="io.swagger.annotations.Api">
+      <point x="171.75" y="-27.5" />
+      <point x="1024.75" y="3790.0" />
+      <point x="1285.1375" y="3790.0" />
+      <point x="0.0" y="135.5" />
+    </edge>
+    <edge source="org.springframework.data.repository.Repository" target="org.springframework.stereotype.Indexed">
+      <point x="0.0" y="-15.5" />
+      <point x="258.0" y="1935.0" />
+      <point x="944.5186111111109" y="1935.0" />
+      <point x="-25.75" y="15.5" />
+    </edge>
+    <edge source="java.lang.Throwable.WrappedPrintStream" target="java.lang.Throwable.PrintStreamOrWriter">
+      <point x="-48.5" y="-15.5" />
+      <point x="1481.8166666666668" y="1505.0" />
+      <point x="1475.9861111111113" y="1505.0" />
+      <point x="48.25" y="15.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.respository.JobRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="147.5" />
+    </edge>
+    <edge source="org.springframework.stereotype.Component" target="org.springframework.stereotype.Indexed">
+      <point x="0.0" y="-27.5" />
+      <point x="1647.9412499999999" y="1935.0" />
+      <point x="996.0186111111109" y="1935.0" />
+      <point x="25.75" y="15.5" />
+    </edge>
+    <edge source="org.springframework.data.repository.CrudRepository" target="org.springframework.data.repository.Repository">
+      <point x="79.75" y="-147.5" />
+      <point x="253.0" y="2285.0" />
+      <point x="258.0" y="2285.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.entity.JobEntity" target="javax.persistence.Table">
+      <point x="71.0" y="-160.0" />
+      <point x="1856.0" y="3216.0" />
+      <point x="2027.25" y="3216.0" />
+      <point x="-85.5" y="75.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.JobController" target="org.springframework.web.bind.annotation.RequestMapping">
+      <point x="-57.25" y="-27.5" />
+      <point x="795.75" y="3730.0" />
+      <point x="673.5" y="3730.0" />
+      <point x="0.0" y="111.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.dao.JenkinsDao" target="org.springframework.stereotype.Repository">
+      <point x="0.0" y="-27.5" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.JobController" target="com.cloudwatt.example.api.rest.AbstractController">
+      <point x="-171.75" y="-27.5" />
+      <point x="681.25" y="3740.0" />
+      <point x="437.0" y="3740.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.springframework.boot.web.servlet.support.SpringBootServletInitializer.WebEnvironmentPropertySourceInitializer" target="org.springframework.boot.web.servlet.support.SpringBootServletInitializer">
+      <point x="0.0" y="-40.0" />
+      <point x="71.25" y="40.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.JobController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="57.25" y="-27.5" />
+      <point x="910.25" y="3770.0" />
+      <point x="1040.1374999999998" y="3770.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="org.springframework.stereotype.Repository" target="org.springframework.stereotype.Component">
+      <point x="0.0" y="-27.5" />
+      <point x="433.25" y="2275.0" />
+      <point x="1583.5412499999998" y="2275.0" />
+      <point x="-64.39999999999998" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.Application" target="org.springframework.boot.autoconfigure.SpringBootApplication">
+      <point x="-16.666666666666515" y="-27.5" />
+      <point x="3071.7231944444443" y="2716.0" />
+      <point x="3034.9561111111107" y="2716.0" />
+      <point x="0.0" y="63.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.RestControllerAspect" target="org.aspectj.lang.annotation.Aspect">
+      <point x="75.75" y="-27.5" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="java.lang.Exception" target="java.lang.Throwable">
+      <point x="0.0" y="-63.5" />
+      <point x="656.5666666666668" y="817.0" />
+      <point x="1138.3944444444446" y="817.0" />
+      <point x="-121.20000000000005" y="208.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.client.JenkinsClient" target="org.springframework.stereotype.Component">
+      <point x="0.0" y="-64.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.RestErrorInfo" target="javax.xml.bind.annotation.XmlRootElement">
+      <point x="0.0" y="-52.0" />
+      <point x="0.0" y="39.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.exception.ResourceNotFoundException" target="java.lang.RuntimeException">
+      <point x="0.0" y="-63.5" />
+      <point x="878.7361111111111" y="1682.0" />
+      <point x="739.3166666666668" y="1682.0" />
+      <point x="82.75" y="63.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.AbstractRestHandler" target="org.springframework.context.ApplicationEventPublisherAware">
+      <point x="0.0" y="-64.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.Application" target="org.springframework.boot.web.servlet.support.SpringBootServletInitializer">
+      <point x="83.33333333333348" y="-27.5" />
+      <point x="3171.7231944444443" y="2746.0" />
+      <point x="3661.2061111111107" y="2746.0" />
+      <point x="-71.25" y="40.0" />
+    </edge>
+    <edge source="org.springframework.context.annotation.ComponentScan.Filter" target="org.springframework.context.annotation.ComponentScan">
+      <point x="0.0" y="-63.5" />
+      <point x="2481.44125" y="2285.0" />
+      <point x="2541.3936111111107" y="2285.0" />
+      <point x="-174.375" y="147.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.Application" target="org.springframework.context.annotation.Configuration">
+      <point x="-83.33333333333348" y="-27.5" />
+      <point x="3005.0565277777773" y="2736.0" />
+      <point x="2013.1079166666666" y="2736.0" />
+      <point x="53.66666666666674" y="27.5" />
+    </edge>
+    <edge source="org.springframework.boot.autoconfigure.SpringBootApplication" target="org.springframework.boot.autoconfigure.EnableAutoConfiguration">
+      <point x="80.0" y="-63.5" />
+      <point x="3114.9561111111107" y="2285.0" />
+      <point x="3074.4561111111107" y="2285.0" />
+      <point x="-85.75" y="52.0" />
+    </edge>
+    <edge source="com.cloudwatt.example.entity.JobEntity" target="javax.persistence.Entity">
+      <point x="-71.0" y="-160.0" />
+      <point x="-40.5" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.FolderController" target="com.cloudwatt.example.api.rest.AbstractController">
+      <point x="-165.0" y="-39.5" />
+      <point x="219.0" y="3740.0" />
+      <point x="378.0" y="3740.0" />
+      <point x="-59.0" y="15.5" />
+    </edge>
+    <edge source="java.lang.Throwable.WrappedPrintWriter" target="java.lang.Throwable.PrintStreamOrWriter">
+      <point x="47.25" y="-15.5" />
+      <point x="1366.0666666666668" y="1505.0" />
+      <point x="1379.4861111111113" y="1505.0" />
+      <point x="-48.25" y="15.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.ApplicationConfiguration" target="org.springframework.context.annotation.PropertySource">
+      <point x="-111.5" y="-64.0" />
+      <point x="1275.2720833333333" y="2746.0" />
+      <point x="1213.4412499999999" y="2746.0" />
+      <point x="0.0" y="75.5" />
+    </edge>
+    <edge source="java.lang.Throwable.SentinelHolder" target="java.lang.Throwable">
+      <point x="0.0" y="-39.5" />
+      <point x="1037.0666666666668" y="827.0" />
+      <point x="1198.9944444444445" y="827.0" />
+      <point x="-60.60000000000002" y="208.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.MetricsController" target="io.swagger.annotations.Api">
+      <point x="186.0" y="-39.5" />
+      <point x="1536.0" y="3690.0" />
+      <point x="1381.4708333333333" y="3690.0" />
+      <point x="96.33333333333326" y="135.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.MetricsController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="62.0" y="-39.5" />
+      <point x="1412.0" y="3700.0" />
+      <point x="1093.8041666666666" y="3700.0" />
+      <point x="53.66666666666663" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.exception.DataFormatException" target="java.lang.RuntimeException">
+      <point x="1.1368683772161603E-13" y="-63.5" />
+      <point x="477.7361111111112" y="1682.0" />
+      <point x="573.8166666666668" y="1682.0" />
+      <point x="-82.75" y="63.5" />
+    </edge>
+    <edge source="org.springframework.context.annotation.Configuration" target="org.springframework.stereotype.Component">
+      <point x="0.0" y="-27.5" />
+      <point x="1959.4412499999999" y="2285.0" />
+      <point x="1680.14125" y="2285.0" />
+      <point x="32.200000000000045" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.FolderController" target="org.springframework.web.bind.annotation.RequestMapping">
+      <point x="-55.0" y="-39.5" />
+      <point x="329.0" y="3750.0" />
+      <point x="588.1666666666667" y="3750.0" />
+      <point x="-85.33333333333331" y="111.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonJob" target="com.cloudwatt.example.domain.jenkins.HudsonNode">
+      <point x="-95.33333333333331" y="-316.5" />
+      <point x="239.33333333333348" y="827.0" />
+      <point x="90.0" y="827.0" />
+      <point x="0.0" y="64.0" />
+    </edge>
+    <edge source="org.springframework.data.repository.CrudRepository" target="org.springframework.data.repository.NoRepositoryBean">
+      <point x="-79.75" y="-147.5" />
+      <point x="93.5" y="2285.0" />
+      <point x="88.5" y="2285.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.api.rest.docs.SwaggerConfig" target="org.springframework.context.annotation.Configuration">
+      <point x="-51.33333333333326" y="-27.5" />
+      <point x="2594.3715277777774" y="2746.0" />
+      <point x="1959.4412499999999" y="2746.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="com.cloudwatt.example.domain.jenkins.HudsonJob" target="java.io.Serializable">
+      <point x="95.33333333333331" y="-316.5" />
+      <point x="430.00000000000006" y="807.0" />
+      <point x="692.0000000000001" y="807.0" />
+      <point x="692.0000000000001" y="345.0" />
+      <point x="685.2500000000001" y="345.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.37496677004873724" x="1362.9173350730302" y="3011.415337350821" />
+  <SelectedNodes>
+    <node>com.cloudwatt.example.api.rest.docs.SwaggerConfig</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
