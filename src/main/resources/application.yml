@@ -28,7 +28,8 @@ spring:
   h2:
     console:
       enabled: true
-
+  banner:
+    location: classpath:/banner.txt
 spring.jpa:
   hibernate.ddl-auto: create-drop
 
@@ -43,4 +44,3 @@ specific:
   jenkins_user: izeghouh
   jenkins_token: 59bec667a95aa18b1f8d5fecd49d987e
   jenkins_base_url: https://ci.int0.aub.cloudwatt.net
-
