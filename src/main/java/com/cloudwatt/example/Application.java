@@ -25,7 +25,7 @@ public class Application extends SpringBootServletInitializer {
 
 	  public static void main(String... args) {
       SpringApplication app = new SpringApplication(Application.class);
-      app.setBannerMode(Mode.OFF);
+      // app.setBannerMode(Mode.OFF);
       app.run(args);
     }
 

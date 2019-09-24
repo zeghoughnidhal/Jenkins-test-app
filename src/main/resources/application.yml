@@ -4,8 +4,8 @@ spring:
 #  # Database
 #  datasource:
 #    url: "jdbc:postgresql://localhost:5432/jenkins"
-#    username: postgres
-#    password: pwd
+#    username:
+#    password:
 #  # JPA properties
 #  jpa:
 #    properties:
@@ -28,8 +28,7 @@ spring:
   h2:
     console:
       enabled: true
-  banner:
-    location: classpath:/banner.txt
+spring.banner.location: classpath:/banner.txt
 spring.jpa:
   hibernate.ddl-auto: create-drop
 
@@ -39,8 +38,9 @@ hotel.service:
 logging:
   file: boot_example.log
   org.hibernate: INFO
+  root: INFO
 
 specific:
-  jenkins_user: izeghouh
-  jenkins_token: 59bec667a95aa18b1f8d5fecd49d987e
-  jenkins_base_url: https://ci.int0.aub.cloudwatt.net
+  jenkins_user: #username
+  jenkins_token: #token
+  jenkins_base_url: #url
